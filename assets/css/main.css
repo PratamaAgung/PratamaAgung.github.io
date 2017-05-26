@@ -2292,6 +2292,10 @@
 		margin: 0 0 1em 0;
 	}
 
+	section p{
+		text-align: justify;
+	}
+
 /* Form */
 
 	form {
