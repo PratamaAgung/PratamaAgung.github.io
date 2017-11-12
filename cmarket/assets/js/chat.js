@@ -96,21 +96,32 @@ var pay = function(target){
     if(found){
         var id = Math.random().toString(36).substring(7);
         payment_id.push(id);
-        sendMessage('This is your payment ID ' + id + '<br>We are waiting for your payment. See you :)', 'left');
+        var total_payment = 0;
+        for(x in bracket){
+            var price = '';
+            for(var i = 0; i < bracket[x].price.length; i++){
+                if(bracket[x].price[i] <='9' && bracket[x].price[i] >= '0') {
+                    price += bracket[x].price[i];
+                } else if (bracket[x].price[i] == ','){
+                    break;
+                }
+            }
+            total_payment += parseInt(price);
+        }
+        bracket = [];
+        sendMessage('Your total shopping is Rp' + total_payment + ',00<br>This is your payment ID ' + id + '<br>We are waiting for your payment. See you :)', 'left');
     } else {
         sendMessage('Sorry we can\'t process that payment method', 'left');
     }
 };
 
+var delete_bracket = function(id){
+    sendMessage('delete ' + id, 'right');
+};
+
 (function () {
     var createCarouselElmt = function(arg){
         var div = document.createElement('div');
-        if (arg.id != null){
-            div.setAttribute('id', (arg.id != null) ? arg.id : '');
-            div.setAttribute('onclick', 'buy("' + arg.id + '", "'+ arg.available+'")');
-        } else {
-            div.setAttribute('onclick', 'pay("' + arg.title + '")');
-        }
 
         var div_image = document.createElement('div');
         var img = document.createElement('img');
@@ -151,6 +162,19 @@ var pay = function(target){
             div_price.innerHTML = arg.price;
             div_price.setAttribute('style', 'float:right; padding: 0px 5px; font-size : 12pt; font-weight:bold');
             div.appendChild(div_price);
+        }
+
+        if (arg.deletable != null){
+            var div_delete = document.createElement('span');
+            div_delete.innerHTML = '<i class="material-icons">delete_forever</i> Delete';
+            div_delete.setAttribute('style', 'padding : 5px; color:red;');
+            div_delete.setAttribute('onclick', 'delete_bracket("' + arg.id + '")');
+            div.appendChild(div_delete);
+        } else if (arg.id != null){
+            div.setAttribute('id', (arg.id != null) ? arg.id : '');
+            div.setAttribute('onclick', 'buy("' + arg.id + '", "'+ arg.available+'")');
+        } else {
+            div.setAttribute('onclick', 'pay("' + arg.title + '")');
         }
         return div;
     }
@@ -241,7 +265,9 @@ var pay = function(target){
                     var item = text.substring(text.toLowerCase().indexOf('\\buy') + 5, text.toLowerCase().indexOf('\\buy') + 5 + i);
                     for(j = 0; j < all.length; j++){
                         if (item == all[j].id) {
-                            bracket.push(all[j]);
+                            var selected_item = all[j];
+                            selected_item['deletable'] = true;
+                            bracket.push(selected_item);
                             found = true;
                             break;
                         }
@@ -269,7 +295,7 @@ var pay = function(target){
                     });
                     message.draw();
                 } else {
-                    sendMessage('There is nothing inside your bracket', 'right');
+                    sendMessage('There is nothing inside your bracket', 'left');
                 }
             } else if (text.toLowerCase().indexOf('checkout') >= 0) {
                 if(bracket.length > 0){
@@ -304,10 +330,29 @@ var pay = function(target){
                 } else {
                     sendMessage("Sorry payment ID is not defined!", 'left');
                 }
+            } else if(text.toLowerCase().indexOf('delete') >= 0) {
+                var found = false;
+                var i = 0;
+                while(i <= text.length - (text.toLowerCase().indexOf('delete') + 6) && !found){
+                    var item = text.substring(text.toLowerCase().indexOf('delete') + 7, text.toLowerCase().indexOf('delete') + 7 + i);
+                    for(j = 0; j < bracket.length; j++){
+                        if (item == bracket[j].id) {
+                            bracket.splice(j, 1);
+                            found = true;
+                            break;
+                        }
+                    } 
+                    i++;
+                }
+                if(found) {
+                    sendMessage("Alright, it has been removed!", 'left');
+                } else {
+                    sendMessage("Sorry the item is not in your bracket!", 'left');
+                }
             } else if (text.toLowerCase().indexOf('exit') >= 0){
                 window.location.href = 'index.html';
             } else if (text.toLowerCase().indexOf('help') >= 0){
-                sendMessageList("Just type anything, I will help you what you want! But here is some key command to help you get in touch with me", command_key, 'left');
+                sendMessageList("Just type anything, I will help you what you want! But here is some key command to help you get in touch with me<br>", command_key, 'left');
             } else {
                 sendMessage('I don\'t understand it :((', 'left');
             }
