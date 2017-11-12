@@ -218,10 +218,14 @@ var pay = function(target){
         }
         welcomeMessage = function(){
             sendMessage('Hello :)', 'left');
+            var item_recommended = all[Math.floor(Math.random()*all.length)]; 
+            if (item_recommended.available != 'yes') {
+                item_recommended = null;
+            }
             var message = new MessageWithCarousel({
                 text: 'We have some recommendation for you!',
                 message_side: 'left',
-                carousel: [sport_1] 
+                carousel:  [item_recommended]
             });
             message.draw();
         };
@@ -297,7 +301,7 @@ var pay = function(target){
                     sendMessage("Sorry payment ID is not defined!", 'left');
                 }
             } else if (text.toLowerCase().indexOf('exit') >= 0){
-
+                window.location.href = 'index.html';
             } else if (text.toLowerCase().indexOf('help') >= 0){
                 sendMessageList("Just type anything, I will help you what you want! But here is some key command to help you get in touch with me", command_key, 'left');
             } else {
