@@ -8,6 +8,10 @@ var command_key = [
         desc : 'checkout what is inside your bracket now'
     },
     {
+        key : 'bracket',
+        desc : 'show what is inside your bracket now'
+    },
+    {
         key : 'pay',
         desc : 'pay what you have bought'
     },
