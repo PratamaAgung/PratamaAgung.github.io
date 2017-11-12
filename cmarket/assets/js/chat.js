@@ -14,6 +14,29 @@ var command_key = [
     {
         key : 'help',
         desc : 'display available command'
+    },
+    {
+        key : 'exit',
+        desc : 'exit chat room'
+    }
+];
+
+var payment_method = [
+    {
+        title : 'Visa',
+        img : 'assets/img/pay1.jpg'
+    }, 
+    {
+        title : 'PayPal',
+        img : 'assets/img/pay2.jpg'
+    },
+    {
+        title : 'MasterCard',
+        img : 'assets/img/pay3.jpg'
+    },
+    {
+        title : 'Bank Transfer',
+        img : 'assets/img/pay4.jpg'
     }
 ];
 var sport_1 = {
@@ -29,7 +52,7 @@ var sport_2 = {
         title : 'Football Jersey',
         price : 'Rp500.000,00',
         desc : 'Great football jersey, comfortable to wear',
-        img : 'assets/img/image2.jpg',
+        img : 'assets/img/image3.jpg',
         available : 'yes'
     };
 var sport_3 = {
@@ -37,10 +60,16 @@ var sport_3 = {
         title : 'Ball',
         price : 'Rp300.000,00',
         desc : 'Great soccer ball, can be used in any environment',
-        img : 'assets/img/image3.jpg',
+        img : 'assets/img/image2.jpg',
         available : 'no'
     };
 var sport = [sport_1,sport_2,sport_3];
+
+var all = [sport_1, sport_2, sport_3];
+
+var bracket = [];
+
+var payment_id = []
 
 var getMessageText, message_side, sendMessage, evaluateMessage;
 
@@ -52,48 +81,73 @@ var buy = function(thing, avail){
     }
 };
 
-var bracket = [];
+var pay = function(target){
+    var found = false;
+    for(var i = 0; i < payment_method.length; i++){
+        if (payment_method[i].title == target){
+            found = true;
+            break;
+        }
+    }
+    if(found){
+        var id = Math.random().toString(36).substring(7);
+        payment_id.push(id);
+        sendMessage('This is your payment ID ' + id + '<br>We are waiting for your payment. See you :)', 'left');
+    } else {
+        sendMessage('Sorry we can\'t process that payment method', 'left');
+    }
+};
 
 (function () {
     var createCarouselElmt = function(arg){
         var div = document.createElement('div');
-        div.setAttribute('id', arg.id);
-        div.setAttribute('onclick', 'buy("' + arg.id + '", "'+ arg.available+'")');
-        var img = document.createElement('img');
-        var div_title = document.createElement('div');
-        div_title.innerHTML = arg.title;
-        div_title.setAttribute('style', 'display:block; padding: 0px 5px; font-size : 18pt;')
-        div.setAttribute('class', 'image_container');
+        if (arg.id != null){
+            div.setAttribute('id', (arg.id != null) ? arg.id : '');
+            div.setAttribute('onclick', 'buy("' + arg.id + '", "'+ arg.available+'")');
+        } else {
+            div.setAttribute('onclick', 'pay("' + arg.title + '")');
+        }
 
         var div_image = document.createElement('div');
+        var img = document.createElement('img');
         div_image.setAttribute('style', 'float : left;');
         img.setAttribute('src', arg.img); 
         img.setAttribute('class', 'image_carousel');
         div_image.appendChild(img);
+        div.appendChild(div_image);
+        
+        if (arg.available){   
+            var div_avail = document.createElement('div');
+            if(arg.available == 'yes'){
+                div_avail.innerHTML = '<i class="material-icons">check_circle</i> Available';
+                div_avail.setAttribute('style', 'color:green; float:right;');
+            } else {
+                div_avail.innerHTML = '<i class="material-icons">not_interested</i> Not Available';
+                div_avail.setAttribute('style', 'color:red; float:right');
+            }
+            div.appendChild(div_avail);
+        }
+        
+        var div_title = document.createElement('div');
+        div_title.innerHTML = arg.title;
+        div_title.setAttribute('style', 'display:block; padding: 0px 5px; font-size : 18pt;')
+        div.setAttribute('class', 'image_container');
+        div.appendChild(div_title);
 
-        var div_desc = document.createElement('div');
-        div_desc.innerHTML = arg.desc;
-        div_desc.setAttribute('style', 'display:block; padding: 0px 5px; font-size : 12pt;')
 
-        var div_price = document.createElement('div');
-        div_price.innerHTML = arg.price;
-        div_price.setAttribute('style', 'float:right; padding: 0px 5px; font-size : 12pt; font-weight:bold');
-
-        var div_avail = document.createElement('div');
-        if(arg.available == 'yes'){
-            div_avail.innerHTML = '<i class="material-icons">check_circle</i> Available';
-            div_avail.setAttribute('style', 'color:green; float:right;');
-        } else {
-            div_avail.innerHTML = '<i class="material-icons">not_interested</i> Not Available';
-            div_avail.setAttribute('style', 'color:red; float:right');
+        if (arg.desc != null){    
+            var div_desc = document.createElement('div');
+            div_desc.innerHTML = arg.desc;
+            div_desc.setAttribute('style', 'display:block; padding: 0px 5px; font-size : 12pt;')
+            div.appendChild(div_desc);
         }
 
-        div_avail.innerHTML
-        div.appendChild(div_image);
-        div.appendChild(div_avail);
-        div.appendChild(div_title);
-        div.appendChild(div_desc);
-        div.appendChild(div_price);
+        if (arg.price != null){
+            var div_price = document.createElement('div');
+            div_price.innerHTML = arg.price;
+            div_price.setAttribute('style', 'float:right; padding: 0px 5px; font-size : 12pt; font-weight:bold');
+            div.appendChild(div_price);
+        }
         return div;
     }
     var Message;
@@ -173,7 +227,24 @@ var bracket = [];
         };
         evaluateMessage = function(text){
             if(text.toLowerCase().indexOf('\\buy') >= 0) {
-                sendMessage("Okay, it's in your bracket now!", 'left');
+                var found = false;
+                var i = 0;
+                while(i <= text.length - (text.toLowerCase().indexOf('\\buy') + 4) && !found){
+                    var item = text.substring(text.toLowerCase().indexOf('\\buy') + 5, text.toLowerCase().indexOf('\\buy') + 5 + i);
+                    for(j = 0; j < all.length; j++){
+                        if (item == all[j].id) {
+                            bracket.push(all[j]);
+                            found = true;
+                            break;
+                        }
+                    } 
+                    i++;
+                }
+                if(found) {
+                    sendMessage("Okay, it's in your bracket now!", 'left');
+                } else {
+                    sendMessage("Sorry items not available!", 'left');
+                }
             } else if(text.toLowerCase().indexOf('search') >= 0) {
                 var message = new MessageWithCarousel({
                     text: 'Here is our top recommendation based on your search',
@@ -181,24 +252,52 @@ var bracket = [];
                     carousel: sport 
                 });
                 message.draw();
-            } else if (text.toLowerCase().indexOf('checkout') >= 0) {
-                if(bracket.length > 0){
-                    sendMessage("It is what is inside your bracket", 'left');
+            } else if (text.toLowerCase().indexOf('bracket') >= 0){
+                if (bracket.length > 0){
                     var message = new MessageWithCarousel({
-                        text: 'We have some recommendation for you!',
+                        text: 'These is the things inside your bracket',
                         message_side: 'left',
-                        carousel: sport 
+                        carousel: bracket 
                     });
                     message.draw();
+                } else {
+                    sendMessage('There is nothing inside your bracket', 'right');
+                }
+            } else if (text.toLowerCase().indexOf('checkout') >= 0) {
+                if(bracket.length > 0){
                     var paymentList = new MessageWithCarousel({
-                        text : "Please choose your payment menthod:",
+                        text : "Please choose your payment method:",
                         message_side : 'left',
-                        carousel : bracket
+                        carousel : payment_method
                     })
                     paymentList.draw();
                 } else {
-                    sendMessage('Sorry you haven\'t choosen anything yet :(', 'left');
+                    sendMessage('You can\'t pay for nothing' , 'left');
                 }
+            } else if (text.toLowerCase().indexOf('pay') >= 0){
+                var found = false;
+                var i = 0;
+                while(i <= text.length - (text.toLowerCase().indexOf('pay') + 3) && !found){
+                    var k = i;
+                    while (k <= text.length - (text.toLowerCase().indexOf('pay') + 3) && !found){
+                        var item = text.substring(text.toLowerCase().indexOf('pay') + 4 + i, text.toLowerCase().indexOf('pay') + 4 + i + k);
+                        for(j = 0; j < payment_id.length; j++){
+                            if (item == payment_id[j]) {
+                                found = true;
+                                break;
+                            }
+                        }
+                        k++;
+                    }
+                    i++;
+                }
+                if(found) {
+                    sendMessage("Thank you for your transactions! Hope you enjoy your best experience with me :)", 'left');
+                } else {
+                    sendMessage("Sorry payment ID is not defined!", 'left');
+                }
+            } else if (text.toLowerCase().indexOf('exit') >= 0){
+
             } else if (text.toLowerCase().indexOf('help') >= 0){
                 sendMessageList("Just type anything, I will help you what you want! But here is some key command to help you get in touch with me", command_key, 'left');
             } else {
