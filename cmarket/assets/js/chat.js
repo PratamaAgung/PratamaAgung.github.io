@@ -377,8 +377,10 @@ var delete_bracket = function(id){
                 } else {
                     sendMessage("You haven't ordered anything", 'left');
                 }
-            }else if (text.toLowerCase().indexOf('help') >= 0){
+            } else if (text.toLowerCase().indexOf('help') >= 0){
                 sendMessageList("Just type anything, I will help you what you want! But here is some key command to help you get in touch with me<br>", command_key, 'left');
+            } else if (text.toLowerCase().indexOf('hello') >= 0) {
+                sendMessage("Hello! My name is C-Market, your personal assistant in your shopping needs! Don't be afraid to ask for <b>help</b> :)<br>", 'left');
             } else {
                 sendMessage('I don\'t understand it :((', 'left');
             }
