@@ -5,11 +5,11 @@ var command_key = [
     },
     {
         key : '<b>checkout</b>',
-        desc : 'checkout what is inside your bracket now'
+        desc : 'checkout what is inside your cart now'
     },
     {
-        key : '<b>bracket</b>',
-        desc : 'show what is inside your bracket now'
+        key : '<b>cart</b>',
+        desc : 'show what is inside your cart now'
     },
     {
         key : '<b>pay</b>',
@@ -75,6 +75,8 @@ var bracket = [];
 
 var payment_id = []
 
+var ongoing = [];
+
 var getMessageText, message_side, sendMessage, evaluateMessage;
 
 var buy = function(thing, avail){
@@ -108,6 +110,15 @@ var pay = function(target){
             }
             total_payment += parseInt(price);
         }
+        for(x in bracket){
+            bracket[x].deletable = null;
+        }
+        var ongoing_item = {};
+        ongoing_item['id'] = id;
+        ongoing_item['total'] = total_payment;
+        ongoing_item['item'] = JSON.parse(JSON.stringify(bracket));
+
+        ongoing.push(ongoing_item);
         bracket = [];
         sendMessage('Your total shopping is Rp' + total_payment + ',00<br>This is your payment ID ' + id + '<br>We are waiting for your payment. See you :)', 'left');
     } else {
@@ -275,7 +286,7 @@ var delete_bracket = function(id){
                     i++;
                 }
                 if(found) {
-                    sendMessage("Okay, it's in your bracket now!", 'left');
+                    sendMessage("Okay, it's in your cart now!", 'left');
                 } else {
                     sendMessage("Sorry items not available!", 'left');
                 }
@@ -286,16 +297,16 @@ var delete_bracket = function(id){
                     carousel: sport 
                 });
                 message.draw();
-            } else if (text.toLowerCase().indexOf('bracket') >= 0){
+            } else if (text.toLowerCase().indexOf('cart') >= 0){
                 if (bracket.length > 0){
                     var message = new MessageWithCarousel({
-                        text: 'These is the things inside your bracket',
+                        text: 'These is the things inside your cart',
                         message_side: 'left',
                         carousel: bracket 
                     });
                     message.draw();
                 } else {
-                    sendMessage('There is nothing inside your bracket', 'left');
+                    sendMessage('There is nothing inside your cart', 'left');
                 }
             } else if (text.toLowerCase().indexOf('pay') >= 0) {
                 if(bracket.length > 0){
@@ -348,11 +359,25 @@ var delete_bracket = function(id){
                 if(found) {
                     sendMessage("Alright, it has been removed!", 'left');
                 } else {
-                    sendMessage("Sorry the item is not in your bracket!", 'left');
+                    sendMessage("Sorry the item is not in your cart!", 'left');
                 }
             } else if (text.toLowerCase().indexOf('exit') >= 0){
                 window.location.href = 'index.html';
-            } else if (text.toLowerCase().indexOf('help') >= 0){
+            } else if (text.toLowerCase().indexOf('ongoing') >= 0){
+                if(ongoing.length > 0){
+                    for(x in ongoing){
+                        console.log(ongoing[x].item);
+                        var message = new MessageWithCarousel({
+                            text : "Transaction ID: " + ongoing[x].id + "<br>Total payment: Rp" + ongoing[x].total + ",00<br>Item:",
+                            message_side : 'left',
+                            carousel : ongoing[x].item
+                        });
+                        message.draw();
+                    }
+                } else {
+                    sendMessage("You haven't ordered anything", 'left');
+                }
+            }else if (text.toLowerCase().indexOf('help') >= 0){
                 sendMessageList("Just type anything, I will help you what you want! But here is some key command to help you get in touch with me<br>", command_key, 'left');
             } else {
                 sendMessage('I don\'t understand it :((', 'left');
