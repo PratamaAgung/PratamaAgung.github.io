@@ -337,6 +337,7 @@ var delete_bracket = function(id){
                     var item = text.substring(text.toLowerCase().indexOf('delete') + 7, text.toLowerCase().indexOf('delete') + 7 + i);
                     for(j = 0; j < bracket.length; j++){
                         if (item == bracket[j].id) {
+                            bracket[j].deletable = null;
                             bracket.splice(j, 1);
                             found = true;
                             break;
