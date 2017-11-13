@@ -1,26 +1,26 @@
 var command_key = [
     {
-        key : 'search',
-        desc : 'help you to search ehat you want'
+        key : '<b>search</b>',
+        desc : 'help you to search what you want'
     },
     {
-        key : 'checkout',
+        key : '<b>checkout</b>',
         desc : 'checkout what is inside your bracket now'
     },
     {
-        key : 'bracket',
+        key : '<b>bracket</b>',
         desc : 'show what is inside your bracket now'
     },
     {
-        key : 'pay',
+        key : '<b>pay</b>',
         desc : 'pay what you have bought'
     },
     {
-        key : 'help',
+        key : '<b>help</b>',
         desc : 'display available command'
     },
     {
-        key : 'exit',
+        key : '<b>exit</b>',
         desc : 'exit chat room'
     }
 ];
@@ -265,7 +265,7 @@ var delete_bracket = function(id){
                     var item = text.substring(text.toLowerCase().indexOf('\\buy') + 5, text.toLowerCase().indexOf('\\buy') + 5 + i);
                     for(j = 0; j < all.length; j++){
                         if (item == all[j].id) {
-                            var selected_item = all[j];
+                            var selected_item = JSON.parse(JSON.stringify(all[j]));
                             selected_item['deletable'] = true;
                             bracket.push(selected_item);
                             found = true;
@@ -279,7 +279,7 @@ var delete_bracket = function(id){
                 } else {
                     sendMessage("Sorry items not available!", 'left');
                 }
-            } else if(text.toLowerCase().indexOf('search') >= 0) {
+            } else if((text.toLowerCase().indexOf('search') >= 0) || (text.toLowerCase().indexOf('find') >= 0)) {
                 var message = new MessageWithCarousel({
                     text: 'Here is our top recommendation based on your search',
                     message_side: 'left',
@@ -297,7 +297,7 @@ var delete_bracket = function(id){
                 } else {
                     sendMessage('There is nothing inside your bracket', 'left');
                 }
-            } else if (text.toLowerCase().indexOf('checkout') >= 0) {
+            } else if (text.toLowerCase().indexOf('pay') >= 0) {
                 if(bracket.length > 0){
                     var paymentList = new MessageWithCarousel({
                         text : "Please choose your payment method:",
@@ -308,7 +308,7 @@ var delete_bracket = function(id){
                 } else {
                     sendMessage('You can\'t pay for nothing' , 'left');
                 }
-            } else if (text.toLowerCase().indexOf('pay') >= 0){
+            } else if (text.toLowerCase().indexOf('confirm') >= 0){
                 var found = false;
                 var i = 0;
                 while(i <= text.length - (text.toLowerCase().indexOf('pay') + 3) && !found){
