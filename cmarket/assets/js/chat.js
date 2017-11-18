@@ -4,8 +4,8 @@ var command_key = [
         desc : 'help you to search what you want'
     },
     {
-        key : '<b>checkout</b>',
-        desc : 'checkout what is inside your cart now'
+        key : '<b>confirm</b>',
+        desc : 'confirm your payment'
     },
     {
         key : '<b>cart</b>',
