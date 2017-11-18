@@ -4,6 +4,10 @@ var command_key = [
         desc : 'help you to search what you want'
     },
     {
+        key : '<b>sort</b>',
+        desc : 'sort item based on price'
+    },
+    {
         key : '<b>cart</b>',
         desc : 'show what is inside your cart now'
     },
@@ -78,14 +82,12 @@ var sport_3 = {
     };
 
 var people_1 = {
-        id : 'people-1',
         title : 'John',
         desc : 'Glad I bought this !',
         img : 'assets/img/review1.jpg',
 }
 
 var people_2 = {
-        id : 'people-2',
         title : 'Sasha',
         desc : 'Very good and friendly seller !',
         img : 'assets/img/review2.jpg',
@@ -96,6 +98,8 @@ var sport = [sport_1,sport_2,sport_3];
 var all = [sport_1, sport_2, sport_3];
 
 var search_item = [];
+
+var sort_item = [];
 
 var review_item = [people_1, people_2];
 
@@ -393,6 +397,38 @@ var review_bracket = function(id){
                     }
                     search_item = [];
                 }
+            } else if (text.toLowerCase().indexOf('sort') >= 0) {
+                
+                var maks = 999999999999;
+                var prec_maks = -999999999999;
+                var indeks;
+                var temp_price;
+                var int_temp_price;
+                for (i = 0; i < all.length; i++) {
+                    for (j = 0; j < all.length; j++) {
+                        temp_price = (all[j].price).substring(2, (all[j].price.length - 3));
+                        temp_price = temp_price.replace('.','');
+                        int_temp_price = Number(temp_price);
+                        if((int_temp_price < maks) && (int_temp_price > prec_maks)) {
+                            maks = int_temp_price;
+                            indeks = j;
+                        }                            
+                    }
+                    prec_maks = maks;
+                    sort_item.push(all[indeks]);
+                    maks = 999999999999;
+                    indeks = -1;
+                    temp_price = "";
+                    int_temp_price = 0;
+                }
+                
+                var message = new MessageWithCarousel({
+                text: 'Done :D',
+                message_side: 'left',
+                carousel: sort_item 
+                });
+                message.draw();      
+                sort_item = [];          
             } else if (text.toLowerCase().indexOf('cart') >= 0){
                 if (bracket.length > 0){
                     var message = new MessageWithCarousel({
