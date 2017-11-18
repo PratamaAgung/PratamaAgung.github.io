@@ -4,10 +4,6 @@ var command_key = [
         desc : 'help you to search what you want'
     },
     {
-        key : '<b>confirm</b>',
-        desc : 'confirm your payment'
-    },
-    {
         key : '<b>cart</b>',
         desc : 'show what is inside your cart now'
     },
@@ -18,6 +14,18 @@ var command_key = [
     {
         key : '<b>help</b>',
         desc : 'display available command'
+    },
+    {
+    	key : '<b>status</b>',
+    	desc : 'show your item status'
+    },
+    {
+    	key : '<b>received + your payment id</b>',
+    	desc : 'received confirmation (ex : received awh3j)'
+    },    
+    {
+        key : '<b>confirm + your payment id</b>',
+        desc : 'payment confirmation (ex : confirm f32hf)'
     },
     {
         key : '<b>exit</b>',
@@ -43,6 +51,7 @@ var payment_method = [
         img : 'assets/img/pay4.jpg'
     }
 ];
+
 var sport_1 = {
         id : 'sport-1',
         title : 'Soccer Shoes',
@@ -67,9 +76,28 @@ var sport_3 = {
         img : 'assets/img/image2.jpg',
         available : 'no'
     };
+
+var people_1 = {
+        id : 'people-1',
+        title : 'John',
+        desc : 'Glad I bought this !',
+        img : 'assets/img/review1.jpg',
+}
+
+var people_2 = {
+        id : 'people-2',
+        title : 'Sasha',
+        desc : 'Very good and friendly seller !',
+        img : 'assets/img/review2.jpg',
+}
+
 var sport = [sport_1,sport_2,sport_3];
 
 var all = [sport_1, sport_2, sport_3];
+
+var search_item = [];
+
+var review_item = [people_1, people_2];
 
 var bracket = [];
 
@@ -77,7 +105,23 @@ var payment_id = []
 
 var ongoing = [];
 
+var have_paid = [];
+
+var arrived_item = [];
+
+var status_list = [];
+
 var getMessageText, message_side, sendMessage, evaluateMessage;
+
+function cleanArray(actual) {
+  var newArray = new Array();
+  for (var i = 0; i < actual.length; i++) {
+    if (actual[i]) {
+      newArray.push(actual[i]);
+    }
+  }
+  return newArray;
+}
 
 var buy = function(thing, avail){
     if(avail == 'yes'){
@@ -112,13 +156,13 @@ var pay = function(target){
         }
         for(x in bracket){
             bracket[x].deletable = null;
+            bracket[x].review = null;
         }
         var ongoing_item = {};
         ongoing_item['id'] = id;
         ongoing_item['total'] = total_payment;
         ongoing_item['item'] = JSON.parse(JSON.stringify(bracket));
-
-        ongoing.push(ongoing_item);
+        ongoing.push(ongoing_item);	
         bracket = [];
         sendMessage('Your total shopping is Rp' + total_payment + ',00<br>This is your payment ID ' + id + '<br>We are waiting for your payment. See you :)', 'left');
     } else {
@@ -128,6 +172,10 @@ var pay = function(target){
 
 var delete_bracket = function(id){
     sendMessage('delete ' + id, 'right');
+};
+
+var review_bracket = function(id){
+    sendMessage('review', 'right');
 };
 
 (function () {
@@ -160,7 +208,6 @@ var delete_bracket = function(id){
         div.setAttribute('class', 'image_container');
         div.appendChild(div_title);
 
-
         if (arg.desc != null){    
             var div_desc = document.createElement('div');
             div_desc.innerHTML = arg.desc;
@@ -173,6 +220,14 @@ var delete_bracket = function(id){
             div_price.innerHTML = arg.price;
             div_price.setAttribute('style', 'float:right; padding: 0px 5px; font-size : 12pt; font-weight:bold');
             div.appendChild(div_price);
+        }
+
+        if (arg.review != null) {
+            var div_review = document.createElement('span');
+            div_review.innerHTML = '<i class="material-icons">people</i> Review';
+            div_review.setAttribute('style', 'padding : 5px; color:gray;');
+            div_review.setAttribute('onclick', 'review_bracket("' + arg.id + '")');
+            div.appendChild(div_review);
         }
 
         if (arg.deletable != null){
@@ -254,7 +309,22 @@ var delete_bracket = function(id){
                 body += list[x].key + ': ' + list[x].desc + '<br>';
             }
             sendMessage(body, pos);
-        }
+        };
+        sendMessageStatus = function(title, list, list2, pos) {
+            var body = title + "<br>";
+            for(i = 0; i < list.length; i++){
+            	var y = Math.floor((Math.random() * 2) + 1);
+            	if (y == 1) {
+            		body += list[i] + " : Your item is on the way :)" + '<br>';
+            	} else {
+            		body += list[i] + " : Sorry, your item has not been delivered :(" + '<br>';
+            	}
+            }
+            for(i = 0; i < list2.length; i++){
+            	body += list2[i] + " : Your item has arrived :D !" + '<br>';
+            }
+            sendMessage(body, pos);
+        };
         welcomeMessage = function(){
             sendMessage('Hello :)', 'left');
             var item_recommended = all[Math.floor(Math.random()*all.length)]; 
@@ -266,6 +336,7 @@ var delete_bracket = function(id){
                 message_side: 'left',
                 carousel:  [item_recommended]
             });
+            sendMessageList("Just type anything, I will help you what you want! But here is some key command to help you get in touch with me<br>", command_key, 'left');
             message.draw();
         };
         evaluateMessage = function(text){
@@ -278,6 +349,7 @@ var delete_bracket = function(id){
                         if (item == all[j].id) {
                             var selected_item = JSON.parse(JSON.stringify(all[j]));
                             selected_item['deletable'] = true;
+                            selected_item['review'] = true;
                             bracket.push(selected_item);
                             found = true;
                             break;
@@ -290,19 +362,54 @@ var delete_bracket = function(id){
                 } else {
                     sendMessage("Sorry items not available!", 'left');
                 }
-            } else if((text.toLowerCase().indexOf('search') >= 0) || (text.toLowerCase().indexOf('find') >= 0)) {
-                var message = new MessageWithCarousel({
+            } else if((text.toLowerCase().indexOf('search') >= 0) || (text.toLowerCase().indexOf('find') >= 0)) {                
+                if ((text.length - text.toLowerCase().indexOf('search')) == 6) {
+                    var message = new MessageWithCarousel({
                     text: 'Here is our top recommendation based on your search',
                     message_side: 'left',
                     carousel: sport 
-                });
-                message.draw();
+                    });
+                    message.draw();
+                } else {
+                    var found = false;
+                    var i = 0;
+                    if(i <= text.length - (text.toLowerCase().indexOf('search') + 6) && !found) {
+                        var item = text.substring((text.toLowerCase().indexOf('search') + 7), text.length);
+                        for(j = 0; j < all.length; j++){
+                            if (all[j].title.toLowerCase().indexOf(item) >= 0) {
+                                search_item.push(all[j]);
+                            }                      
+                        }                          
+                    }
+                    if (search_item.length > 0) {
+                        var message = new MessageWithCarousel({
+                        text: 'Done :D',
+                        message_side: 'left',
+                        carousel: search_item 
+                        });
+                        message.draw();
+                    } else {
+                        sendMessage("Our seller don't sell that item in here :(","left");
+                    }
+                    search_item = [];
+                }
             } else if (text.toLowerCase().indexOf('cart') >= 0){
                 if (bracket.length > 0){
                     var message = new MessageWithCarousel({
                         text: 'These is the things inside your cart',
                         message_side: 'left',
                         carousel: bracket 
+                    });
+                    message.draw();
+                } else {
+                    sendMessage('There is nothing inside your cart', 'left');
+                }
+            } else if (text.toLowerCase().indexOf('review') >= 0){
+                if (bracket.length > 0){
+                    var message = new MessageWithCarousel({
+                        text: 'Here you go',
+                        message_side: 'left',
+                        carousel: review_item
                     });
                     message.draw();
                 } else {
@@ -321,26 +428,90 @@ var delete_bracket = function(id){
                 }
             } else if (text.toLowerCase().indexOf('confirm') >= 0){
                 var found = false;
+                var foundOngoingItem = false;
                 var i = 0;
-                while(i <= text.length - (text.toLowerCase().indexOf('pay') + 3) && !found){
-                    var k = i;
-                    while (k <= text.length - (text.toLowerCase().indexOf('pay') + 3) && !found){
-                        var item = text.substring(text.toLowerCase().indexOf('pay') + 4 + i, text.toLowerCase().indexOf('pay') + 4 + i + k);
-                        for(j = 0; j < payment_id.length; j++){
-                            if (item == payment_id[j]) {
-                                found = true;
-                                break;
-                            }
-                        }
-                        k++;
-                    }
-                    i++;
+                if (i <= text.length - (text.toLowerCase().indexOf('confirm') + 7) && !found) {
+                    var item = text.substring(text.toLowerCase().indexOf('confirm') + 8, text.length);
+                    for (l = 0; l < have_paid.length; l++) {
+                		if (item == have_paid[l]) {
+                			foundOngoingItem = true;
+                			break;
+                		}
+                	}
+
+                	//if have not paid item
+                	if (!foundOngoingItem) {
+	                    for(j = 0; j < payment_id.length; j++){
+	                        if (item == payment_id[j]) {
+	                            found = true;
+	        					have_paid.push(payment_id[j]);
+	                            break;
+	                        }                      
+	                    }                			
+                	}
                 }
+
                 if(found) {
-                    sendMessage("Thank you for your transactions! Hope you enjoy your best experience with me :)", 'left');
+                    sendMessage("Thank you for your payment! Your transaction has been completed (y) :)", 'left');
+                } else if (foundOngoingItem) {
+                	sendMessage("I'm happy you want to pay more than once, but unfortunately this is not allowed :(", 'left');
                 } else {
                     sendMessage("Sorry payment ID is not defined!", 'left');
                 }
+            } else if (text.toLowerCase().indexOf('received') >= 0) {
+                var found = false;
+                var foundPaid = false;
+                var i = 0;
+                var temp_indeks_payment;
+                if (i <= text.length - (text.toLowerCase().indexOf('received') + 8) && !found) {
+                    var item = text.substring(text.toLowerCase().indexOf('received') + 9, text.length);
+	                // item existence validation
+	                for(j = 0; j < payment_id.length; j++){
+	                    if (item == payment_id[j]) {
+	                        temp_indeks_payment = j;
+	                        found = true;
+	                        break;
+	                    }                      
+	                }                        
+
+	                //item payment validation	
+                    for (l = 0; l < have_paid.length; l++) {
+                        if (item == have_paid[l]) {
+                			foundPaid = true;
+                			delete have_paid[l];
+                			have_paid = cleanArray(have_paid);
+            				break;
+            			}
+            		}
+
+                	//delete all unnecessary element
+                    if (found && foundPaid) {
+	                    for(j = 0; j < ongoing.length; j++) {
+	                        if (item == ongoing[j].id) {
+	                            delete ongoing[j];
+	                                break;
+	                        }                            
+	                    }
+	                    arrived_item.push(payment_id[temp_indeks_payment]);
+	                    delete payment_id[temp_indeks_payment];              
+	                    payment_id = cleanArray(payment_id);
+	                    have_paid = cleanArray(have_paid); 	
+                    }                       
+                }
+                if(found && (!foundPaid)) {
+                    sendMessage("You haven't pay :(", 'left');
+                } else if (found && foundPaid) {
+                	sendMessage("Thank you for buying with us! Hope you enjoy your best experience with me :)", 'left');
+                } else {
+                    sendMessage("Sorry payment ID is not defined!", 'left');
+                }
+            } else if (text.toLowerCase().indexOf('status') >= 0) {
+            	if ((have_paid.length != 0) || (arrived_item != 0)) {
+            		sendMessageStatus("Your item based on ID : <br>", have_paid, arrived_item, "left");
+            	} else {
+            		sendMessage("You haven't paid or buy any item :(","left");
+            	}
+
             } else if(text.toLowerCase().indexOf('delete') >= 0) {
                 var found = false;
                 var i = 0;
@@ -349,6 +520,7 @@ var delete_bracket = function(id){
                     for(j = 0; j < bracket.length; j++){
                         if (item == bracket[j].id) {
                             bracket[j].deletable = null;
+                            bracket[j].review = null;
                             bracket.splice(j, 1);
                             found = true;
                             break;
