@@ -200,6 +200,54 @@ var status_list = [];
 
 var getMessageText, message_side, sendMessage, evaluateMessage;
 
+$(document).ready(function() {
+    $(form)
+        .formValidation({
+
+    })
+    .on('success.form.fv', function(e) {
+        // Prevent form submission
+        e.preventDefault();
+
+        var $form    = $(e.target),
+            formData = new FormData(),
+            params   = $form.serializeArray(),
+            files    = $form.find('[name="uploadedFiles"]')[0].files;
+
+        $.each(files, function(i, file) {
+            // Prefix the name of uploaded files with "uploadedFiles-"
+            // Of course, you can change it to any string
+            formData.append('uploadedFiles-' + i, file);
+        });
+
+        $.each(params, function(i, val) {
+            formData.append(val.name, val.value);
+        });
+
+        $.ajax({
+            url: $form.attr('action'),
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            type: 'POST',
+            success: function(result) {
+                // Process the result ...
+            }
+        });
+    });
+});
+
+var modal = document.getElementById("myModal");
+
+function openModal() {
+    modal.style.display= "block";
+}
+
+function closeModal() {
+    modal.style.display= "none";
+}
+
 function cleanArray(actual) {
     var newArray = new Array();
     for (var i = 0; i < actual.length; i++) {
@@ -209,46 +257,6 @@ function cleanArray(actual) {
     }
     return newArray;
 }
-
-var pay = function(target){
-    var found = false;
-    for(var i = 0; i < payment_method.length; i++){
-        if (payment_method[i].title == target){
-            found = true;
-            break;
-        }
-    }
-    if(found){
-        var id = Math.random().toString(36).substring(7);
-        payment_id.push(id);
-        var total_payment = 0;
-        for(x in bracket){
-            var price = '';
-            for(var i = 0; i < bracket[x].price.length; i++){
-                if(bracket[x].price[i] <='9' && bracket[x].price[i] >= '0') {
-                    price += bracket[x].price[i];
-                } else if (bracket[x].price[i] == ','){
-                    break;
-                }
-            }
-            total_payment += parseInt(price);
-        }
-        for(x in bracket){
-            bracket[x].deletable = null;
-            bracket[x].review = null;
-        }
-        var ongoing_item = {};
-        ongoing_item['id'] = id;
-        ongoing_item['total'] = total_payment;
-        ongoing_item['item'] = JSON.parse(JSON.stringify(bracket));
-        ongoing_item['status'] = 'not_paid';
-        ongoing.push(ongoing_item);
-        bracket = [];
-        sendMessage('Your total shopping is Rp' + total_payment + ',00<br>This is your payment ID ' + id + '<br>We are waiting for your payment. See you :)', 'left');
-    } else {
-        sendMessage('Sorry we can\'t process that payment method', 'left');
-    }
-};
 
 (function () {
     var createCarouselElmt = function(arg){
@@ -511,10 +519,12 @@ var pay = function(target){
                             delete payment_id[temp_index_payment];
                             payment_id = cleanArray(payment_id);
                             order.splice(j,1);
+                            //summon modal box >:)
+                            openModal();
+                            sendMessage("Thank You! Your image will be sent to the buyer for validation.", 'left');
                             break;
                         }
                     }
-                    //summon modal box! >:)
                 }
                 if(!found) {
                     sendMessage("Sorry payment ID is not defined!", 'left');
@@ -522,7 +532,6 @@ var pay = function(target){
             } else if (text.toLowerCase().indexOf('order') >= 0){
                 var view = null;
                 view = order;
-                alert(order);
                 if(view != ""){
                     var message = new MessageWithCarousel({
                         text: 'Here is the order people left on your shop',
