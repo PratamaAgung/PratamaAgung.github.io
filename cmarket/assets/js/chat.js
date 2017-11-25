@@ -166,6 +166,7 @@ var pay = function(target){
         ongoing_item['id'] = id;
         ongoing_item['total'] = total_payment;
         ongoing_item['item'] = JSON.parse(JSON.stringify(bracket));
+        ongoing_item['status'] = 'not_paid';
         ongoing.push(ongoing_item);	
         bracket = [];
         sendMessage('Your total shopping is Rp' + total_payment + ',00<br>This is your payment ID ' + id + '<br>We are waiting for your payment. See you :)', 'left');
@@ -483,6 +484,16 @@ var review_bracket = function(id){
 	        					have_paid.push(payment_id[j]);
 	                            break;
 	                        }                      
+	                    }
+	                    for(j = 0; j < ongoing.length; j++){
+	                    	if(item == ongoing[j].id) {
+	                    		var y = Math.floor((Math.random() * 2) + 1);
+	                    		if (y == 1) {
+	                    			ongoing[j].status = 'paid';
+	                    		} else {
+	                    			ongoing[j].status = 'deliver';
+	                    		}
+	                    	}
 	                    }                			
                 	}
                 }
@@ -524,7 +535,7 @@ var review_bracket = function(id){
                     if (found && foundPaid) {
 	                    for(j = 0; j < ongoing.length; j++) {
 	                        if (item == ongoing[j].id) {
-	                            delete ongoing[j];
+	                            ongoing.splice(j,1);
 	                                break;
 	                        }                            
 	                    }
@@ -572,6 +583,7 @@ var review_bracket = function(id){
             } else if (text.toLowerCase().indexOf('exit') >= 0){
                 window.location.href = 'index.html';
             } else if (text.toLowerCase().indexOf('ongoing') >= 0){
+            	console.log(ongoing.length);
                 if(ongoing.length > 0){
                     for(x in ongoing){
                         console.log(ongoing[x].item);
@@ -581,6 +593,13 @@ var review_bracket = function(id){
                             carousel : ongoing[x].item
                         });
                         message.draw();
+                        if(ongoing[x].status == 'not_paid'){
+                        	sendMessage("You haven't paid for this order, please confirm us right after you pay it.", "left");
+                        } else if (ongoing[x].status == 'paid') {
+                        	sendMessage("You have paid for this order, we are processing your payment", 'left');
+                        } else if (ongoing[x].status == 'deliver') {
+                        	sendMessage("The items has been delivered", 'left');
+                        }
                     }
                 } else {
                     sendMessage("You haven't ordered anything", 'left');
