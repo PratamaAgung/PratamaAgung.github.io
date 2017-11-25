@@ -81,6 +81,60 @@ var sport_3 = {
         available : 'no'
     };
 
+var elect_1 = {
+	id : 'elect-1',
+    title : 'Asus ROG G751JY',
+    price : 'Rp30.000.000,00',
+    desc : 'Calling for gamers! Best gaming laptop so far...',
+    img : 'assets/img/rog.png',
+    available : 'yes'
+};
+
+var elect_2 = {
+	id : 'elect-2',
+    title : 'iPhone X',
+    price : 'Rp14.000.000,00',
+    desc : 'Newest generation of iPhone is available now, here in iPhone X',
+    img : 'assets/img/iphoneX.jpg',
+    available : 'yes'	
+}
+
+var elect_3 = {
+	id : 'elect-3',
+    title : 'Sony A6000 Mirrorless Camera',
+    price : 'Rp8.000.000,00',
+    desc : 'Want to catch wonderful image in a handy camera? Never miss it!',
+    img : 'assets/img/sonycamera.jpg',
+    available : 'yes'
+}
+
+var fashion_1 = {
+	id : 'fasion-1',
+    title : 'Nike Air Max Modern Flyknit',
+    price : 'Rp2.100.000,00',
+    desc : 'Just wear it!',
+    img : 'assets/img/fashion1.jpg',
+    available : 'yes'
+}
+
+var fashion_2 = {
+	id : 'fasion-2',
+    title : 'Adidas Original Trefoil Hoodie',
+    price : 'Rp1.300.000,00',
+    desc : 'Very good hoodie',
+    img : 'assets/img/fashion2.jpg',
+    available : 'yes'
+}
+
+var fashion_3 = {
+	id : 'fasion-3',
+    title : 'Levi\'s Jeans Jacket',
+    price : 'Rp800.000,00',
+    desc : 'Well designed jacket for everyday use',
+    img : 'assets/img/fashion3.jpg',
+    available : 'no'
+}
+
 var people_1 = {
         title : 'John',
         desc : 'Glad I bought this !',
@@ -100,7 +154,11 @@ var resi = {
 
 var sport = [sport_1,sport_2,sport_3];
 
-var all = [sport_1, sport_2, sport_3];
+var elect = [elect_3, elect_1, elect_2];
+
+var fashion = [fashion_1, fashion_2, fashion_3];
+
+var all = [sport_1, sport_2, sport_3, fashion_3, fashion_2, fashion_1, elect_3, elect_2, elect_1];
 
 var search_item = [];
 
@@ -414,36 +472,51 @@ var review_bracket = function(id){
                     sendMessage("Sorry items not available!", 'left');
                 }
             } else if((text.toLowerCase().indexOf('search') >= 0) || (text.toLowerCase().indexOf('find') >= 0)) {                
-                if ((text.length - text.toLowerCase().indexOf('search')) == 6) {
-                    var message = new MessageWithCarousel({
-                    text: 'Here is our top recommendation based on your search',
-                    message_side: 'left',
-                    carousel: sport 
-                    });
-                    message.draw();
-                } else {
-                    var found = false;
-                    var i = 0;
-                    if(i <= text.length - (text.toLowerCase().indexOf('search') + 6) && !found) {
-                        var item = text.substring((text.toLowerCase().indexOf('search') + 7), text.length);
-                        for(j = 0; j < all.length; j++){
-                            if (all[j].title.toLowerCase().indexOf(item) >= 0) {
-                                search_item.push(all[j]);
-                            }                      
-                        }                          
-                    }
-                    if (search_item.length > 0) {
-                        var message = new MessageWithCarousel({
-                        text: 'Done :D',
-                        message_side: 'left',
-                        carousel: search_item 
-                        });
-                        message.draw();
-                    } else {
-                        sendMessage("Our seller don't sell that item in here :(","left");
-                    }
-                    search_item = [];
-                }
+                // if ((text.length - text.toLowerCase().indexOf('search')) == 6) {
+                	var view = null;
+                	if(text.toLowerCase().indexOf('sport') >= 0){
+                		view = sport;
+                	} else if(text.toLowerCase().indexOf('elect') >= 0){
+                		view = elect;
+                	} else if (text.toLowerCase().indexOf('fashion') >= 0){
+                		view = fashion;
+                	} else if (text.toLowerCase().indexOf('all') >= 0){
+                		view = all;
+                	}
+
+                	if(view != null){
+                		var message = new MessageWithCarousel({
+		                    text: 'Here is our top recommendation based on your search',
+		                    message_side: 'left',
+		                    carousel: view 
+	                    });
+	                    message.draw();
+                	} else {
+                		sendMessage("I can\'t get what you want");
+                	}
+                // } else {
+                //     var found = false;
+                //     var i = 0;
+                //     if(i <= text.length - (text.toLowerCase().indexOf('search') + 6) && !found) {
+                //         var item = text.substring((text.toLowerCase().indexOf('search') + 7), text.length);
+                //         for(j = 0; j < all.length; j++){
+                //             if (all[j].title.toLowerCase().indexOf(item) >= 0) {
+                //                 search_item.push(all[j]);
+                //             }                      
+                //         }                          
+                //     }
+                //     if (search_item.length > 0) {
+                //         var message = new MessageWithCarousel({
+                //         text: 'Done :D',
+                //         message_side: 'left',
+                //         carousel: search_item 
+                //         });
+                //         message.draw();
+                //     } else {
+                //         sendMessage("Our seller don't sell that item in here :(","left");
+                //     }
+                //     search_item = [];
+                // }
             } else if (text.toLowerCase().indexOf('sort') >= 0) {
                 
                 var maks = 999999999999;
