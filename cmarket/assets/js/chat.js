@@ -24,6 +24,10 @@ var command_key = [
     	desc : 'show your item status'
     },
     {
+        key : '<b>ongoing</b>',
+        desc : 'show ongoing transaction'
+    },
+    {
     	key : '<b>received + your payment id</b>',
     	desc : 'received confirmation (ex : received awh3j)'
     },    
@@ -440,8 +444,15 @@ var review_bracket = function(id){
             if (item_recommended.available != 'yes') {
                 item_recommended = null;
             }
+            var y = Math.floor((Math.random() * 2) + 1);
+            var text;
+            if (y == 1){
+            	text = "We have some recommendation for you!";
+            } else {
+            	text = "We have a good deal and promo :)";
+            }
             var message = new MessageWithCarousel({
-                text: 'We have some recommendation for you!',
+                text: text,
                 message_side: 'left',
                 carousel:  [item_recommended]
             });
