@@ -93,6 +93,11 @@ var people_2 = {
         img : 'assets/img/review2.jpg',
 }
 
+var resi = {
+	img : 'assets/img/resi.jpg',
+	desc : 'Click button below to download yout receipt'
+}
+
 var sport = [sport_1,sport_2,sport_3];
 
 var all = [sport_1, sport_2, sport_3];
@@ -248,6 +253,30 @@ var review_bracket = function(id){
             div.setAttribute('onclick', 'pay("' + arg.title + '")');
         }
         return div;
+    };
+    var createDownloadableElement = function(arg){
+    	var div = document.createElement('div');
+
+        var div_image = document.createElement('div');
+        var img = document.createElement('img');
+        div_image.setAttribute('style', 'float : left;');
+        img.setAttribute('src', arg.img); 
+        img.setAttribute('class', 'image_carousel');
+        div_image.appendChild(img);
+        div.appendChild(div_image);
+
+        if (arg.desc != null){    
+            var div_desc = document.createElement('div');
+            div_desc.innerHTML = arg.desc;
+            div_desc.setAttribute('style', 'display:block; padding: 0px 5px; font-size : 12pt; margin-left : 5px;')
+            div.appendChild(div_desc);
+        }
+
+        div_download = document.createElement('div');
+        div_download.innerHTML = '<a href="#" class="buttonDownload" style="margin: 5px;">Download</a>';
+        div.appendChild(div_download);
+
+       return div;
     }
     var Message;
     Message = function (arg) {
@@ -284,6 +313,23 @@ var review_bracket = function(id){
         }(this);
         return this;
     };
+    var MessageDownloadable;
+    MessageDownloadable = function(arg){
+    	this.text = arg.text, this.message_side = arg.message_side, this.downloadable = arg.downloadable;
+        this.draw = function (_this) {
+            return function () {
+                var $message;
+                $message = $($('.message_downloadable').clone().html());
+                $message.addClass(_this.message_side).find('.text').html(_this.text);
+				$message.find('.carousel').append(createDownloadableElement(this.downloadable));
+                $('.messages').append($message);
+                return setTimeout(function () {
+                    return $message.addClass('appeared');
+                }, 0);
+            };
+        }(this);
+        return this;
+    }
     $(function () {
         getMessageText = function () {
             var $message_input;
@@ -487,12 +533,7 @@ var review_bracket = function(id){
 	                    }
 	                    for(j = 0; j < ongoing.length; j++){
 	                    	if(item == ongoing[j].id) {
-	                    		var y = Math.floor((Math.random() * 2) + 1);
-	                    		if (y == 1) {
-	                    			ongoing[j].status = 'paid';
-	                    		} else {
-	                    			ongoing[j].status = 'deliver';
-	                    		}
+	                    		ongoing[j].status = 'paid';
 	                    	}
 	                    }                			
                 	}
@@ -598,8 +639,17 @@ var review_bracket = function(id){
                         } else if (ongoing[x].status == 'paid') {
                         	sendMessage("You have paid for this order, we are processing your payment", 'left');
                         } else if (ongoing[x].status == 'deliver') {
-                        	sendMessage("The items has been delivered", 'left');
+                        	var msg = new MessageDownloadable({
+                        		text : "Your order has been delivered, stay calm and wait for it :)",
+                        		message_side : 'left',
+                        		downloadable : resi
+                        	});
+                        	msg.draw();
                         }
+                    }
+                    var y = Math.floor((Math.random() * ongoing.length));
+                    if(ongoing[y].status == 'paid'){
+                    	ongoing[y].status = 'deliver';
                     }
                 } else {
                     sendMessage("You haven't ordered anything", 'left');
