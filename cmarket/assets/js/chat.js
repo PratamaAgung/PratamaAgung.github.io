@@ -503,7 +503,7 @@ var review_bracket = function(id){
 	                    });
 	                    message.draw();
                 	} else {
-                		sendMessage("I can\'t get what you want");
+                		sendMessage("I can\'t get what you want", 'left');
                 	}
                 // } else {
                 //     var found = false;
