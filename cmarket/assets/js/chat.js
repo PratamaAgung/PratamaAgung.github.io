@@ -273,7 +273,7 @@ var review_bracket = function(id){
         }
 
         div_download = document.createElement('div');
-        div_download.innerHTML = '<a href="#" class="buttonDownload" style="margin: 5px;">Download</a>';
+        div_download.innerHTML = '<a href="' + arg.img + '" class="buttonDownload" style="margin: 5px;" download="receipt-c-market.jpg">Download</a>';
         div.appendChild(div_download);
 
        return div;
