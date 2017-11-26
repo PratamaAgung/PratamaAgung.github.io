@@ -182,6 +182,8 @@ var arrived_item = [];
 
 var status_list = [];
 
+var view = []
+
 var getMessageText, message_side, sendMessage, evaluateMessage;
 
 function cleanArray(actual) {
@@ -483,19 +485,42 @@ var review_bracket = function(id){
                     sendMessage("Sorry items not available!", 'left');
                 }
             } else if((text.toLowerCase().indexOf('search') >= 0) || (text.toLowerCase().indexOf('find') >= 0)) {                
-                // if ((text.length - text.toLowerCase().indexOf('search')) == 6) {
                 	var view = null;
+                    search_item = [];
+
+                    if ((text.length - text.toLowerCase().indexOf('search')) > 6) {
+                        var found = false;
+                        var i = 0;
+                        if(i <= text.length - (text.toLowerCase().indexOf('search') + 6) && !found) {
+                            var item = text.substring((text.toLowerCase().indexOf('search') + 7), text.length);
+                            for(j = 0; j < all.length; j++){
+                                if (all[j].title.toLowerCase().indexOf(item) >= 0) {
+                                     search_item.push(all[j]);
+                                 }                      
+                             }                          
+                        }
+                        view = search_item;
+                    }
+
                 	if(text.toLowerCase().indexOf('sport') >= 0){
+                        view = null
                 		view = sport;
                 	} else if(text.toLowerCase().indexOf('elect') >= 0){
+                        view = null
                 		view = elect;
                 	} else if (text.toLowerCase().indexOf('fashion') >= 0){
+                        view = null
                 		view = fashion;
                 	} else if (text.toLowerCase().indexOf('all') >= 0){
+                        view = null
                 		view = all;
                 	}
 
                 	if(view != null){
+                        search_item = [];
+                        for (i = 0; i < view.length; i++) {
+                            search_item.push(view[i]);
+                        }
                 		var message = new MessageWithCarousel({
 		                    text: 'Here is our top recommendation based on your search',
 		                    message_side: 'left',
@@ -505,54 +530,31 @@ var review_bracket = function(id){
                 	} else {
                 		sendMessage("I can\'t get what you want", 'left');
                 	}
-                // } else {
-                //     var found = false;
-                //     var i = 0;
-                //     if(i <= text.length - (text.toLowerCase().indexOf('search') + 6) && !found) {
-                //         var item = text.substring((text.toLowerCase().indexOf('search') + 7), text.length);
-                //         for(j = 0; j < all.length; j++){
-                //             if (all[j].title.toLowerCase().indexOf(item) >= 0) {
-                //                 search_item.push(all[j]);
-                //             }                      
-                //         }                          
-                //     }
-                //     if (search_item.length > 0) {
-                //         var message = new MessageWithCarousel({
-                //         text: 'Done :D',
-                //         message_side: 'left',
-                //         carousel: search_item 
-                //         });
-                //         message.draw();
-                //     } else {
-                //         sendMessage("Our seller don't sell that item in here :(","left");
-                //     }
-                //     search_item = [];
-                // }
+
             } else if (text.toLowerCase().indexOf('sort') >= 0) {
-                
                 var maks = 999999999999;
                 var prec_maks = -999999999999;
                 var indeks;
                 var temp_price;
                 var int_temp_price;
-                for (i = 0; i < all.length; i++) {
-                    for (j = 0; j < all.length; j++) {
-                        temp_price = (all[j].price).substring(2, (all[j].price.length - 3));
-                        temp_price = temp_price.replace('.','');
+                for (i = 0; i < search_item.length; i++) {
+                    for (j = 0; j < search_item.length; j++) {
+                        temp_price = (search_item[j].price).substring(2, (search_item[j].price.length - 3));
+                        temp_price = temp_price.replace(/\./g,'');
                         int_temp_price = Number(temp_price);
+
                         if((int_temp_price < maks) && (int_temp_price > prec_maks)) {
                             maks = int_temp_price;
                             indeks = j;
                         }                            
                     }
                     prec_maks = maks;
-                    sort_item.push(all[indeks]);
+                    sort_item.push(search_item[indeks]);
                     maks = 999999999999;
                     indeks = -1;
                     temp_price = "";
                     int_temp_price = 0;
                 }
-                
                 var message = new MessageWithCarousel({
                 text: 'Done :D',
                 message_side: 'left',
