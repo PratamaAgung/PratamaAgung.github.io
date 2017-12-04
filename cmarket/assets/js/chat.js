@@ -4,7 +4,7 @@ var command_key = [
         desc : 'help you to search what you want'
     },
     {
-        key : '<b>sort</b>',
+        key : '<b>price</b>',
         desc : 'sort item based on price'
     },
     {
@@ -486,9 +486,21 @@ var review_bracket = function(id){
                 }
             } else if((text.toLowerCase().indexOf('search') >= 0) || (text.toLowerCase().indexOf('find') >= 0)) {                
                 	var view = null;
-                    search_item = [];
-
-                    if ((text.length - text.toLowerCase().indexOf('search')) > 6) {
+                    search_item = [];	
+						
+                    if(text.toLowerCase().indexOf('sport') >= 0){
+                        view = null;
+                		view = sport;
+                	} else if(text.toLowerCase().indexOf('elect') >= 0){
+                        view = null;
+                		view = elect;
+                	} else if (text.toLowerCase().indexOf('fashion') >= 0){
+                        view = null;
+                		view = fashion;
+                	} else if (text.toLowerCase().indexOf('all') >= 0){
+                        view = null;
+                		view = all;
+                	} else if  ((text.length - text.toLowerCase().indexOf('search')) > 6) {
                         var found = false;
                         var i = 0;
                         if(i <= text.length - (text.toLowerCase().indexOf('search') + 6) && !found) {
@@ -500,19 +512,10 @@ var review_bracket = function(id){
                              }                          
                         }
                         view = search_item;
-                    } else if(text.toLowerCase().indexOf('sport') >= 0){
-                        view = null
-                		view = sport;
-                	} else if(text.toLowerCase().indexOf('elect') >= 0){
-                        view = null
-                		view = elect;
-                	} else if (text.toLowerCase().indexOf('fashion') >= 0){
-                        view = null
-                		view = fashion;
-                	} else if (text.toLowerCase().indexOf('all') >= 0){
-                        view = null
-                		view = all;
-                	}
+						if (search_item.length == 0) {
+							view = null;
+						}
+					}	
 
                 	if(view != null){
                         search_item = [];
@@ -529,7 +532,7 @@ var review_bracket = function(id){
                 		sendMessage("I can\'t get what you want", 'left');
                 	}
 
-            } else if (text.toLowerCase().indexOf('sort') >= 0) {
+            } else if (text.toLowerCase().indexOf('price') >= 0) {
                 var maks = 999999999999;
                 var prec_maks = -999999999999;
                 var indeks;
