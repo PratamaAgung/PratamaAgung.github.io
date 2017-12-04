@@ -500,9 +500,7 @@ var review_bracket = function(id){
                              }                          
                         }
                         view = search_item;
-                    }
-
-                	if(text.toLowerCase().indexOf('sport') >= 0){
+                    } else if(text.toLowerCase().indexOf('sport') >= 0){
                         view = null
                 		view = sport;
                 	} else if(text.toLowerCase().indexOf('elect') >= 0){
