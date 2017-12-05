@@ -60,13 +60,26 @@ var payment_method = [
     }
 ];
 
+var people_1 = {
+        title : 'John',
+        desc : 'Glad I bought this !',
+        img : 'assets/img/review1.jpg'
+}
+
+var people_2 = {
+        title : 'Sasha',
+        desc : 'Very good and friendly seller !',
+        img : 'assets/img/review2.jpg'
+}
+
 var sport_1 = {
         id : 'sport-1',
         title : 'Soccer Shoes',
         price : 'Rp700.000,00',
         desc : 'Great soccer shoes, can be used in any environment',
         img : 'assets/img/image1.jpg',
-        available : 'yes'
+        available : 'yes',
+        review_item : [people_1, people_2]
     }; 
 var sport_2 = {
         id : 'sport-2',
@@ -74,7 +87,8 @@ var sport_2 = {
         price : 'Rp500.000,00',
         desc : 'Great football jersey, comfortable to wear',
         img : 'assets/img/image3.jpg',
-        available : 'yes'
+        available : 'yes',
+        review_item : [people_1, people_2]
     };
 var sport_3 = {
         id : 'sport-3',
@@ -82,7 +96,8 @@ var sport_3 = {
         price : 'Rp300.000,00',
         desc : 'Great soccer ball, can be used in any environment',
         img : 'assets/img/image2.jpg',
-        available : 'no'
+        available : 'no',
+        review_item : [people_1, people_2]
     };
 
 var elect_1 = {
@@ -91,7 +106,8 @@ var elect_1 = {
     price : 'Rp30.000.000,00',
     desc : 'Calling for gamers! Best gaming laptop so far...',
     img : 'assets/img/rog.png',
-    available : 'yes'
+    available : 'yes',
+    review_item : [people_1, people_2]
 };
 
 var elect_2 = {
@@ -100,7 +116,8 @@ var elect_2 = {
     price : 'Rp14.000.000,00',
     desc : 'Newest generation of iPhone is available now, here in iPhone X',
     img : 'assets/img/iphoneX.jpg',
-    available : 'yes'	
+    available : 'yes',
+    review_item : [people_1, people_2]
 }
 
 var elect_3 = {
@@ -109,7 +126,8 @@ var elect_3 = {
     price : 'Rp8.000.000,00',
     desc : 'Want to catch wonderful image in a handy camera? Never miss it!',
     img : 'assets/img/sonycamera.jpg',
-    available : 'yes'
+    available : 'yes',
+    review_item : [people_1, people_2]
 }
 
 var fashion_1 = {
@@ -118,7 +136,8 @@ var fashion_1 = {
     price : 'Rp2.100.000,00',
     desc : 'Just wear it!',
     img : 'assets/img/fashion1.jpg',
-    available : 'yes'
+    available : 'yes',
+    review_item : [people_1, people_2]
 }
 
 var fashion_2 = {
@@ -127,7 +146,8 @@ var fashion_2 = {
     price : 'Rp1.300.000,00',
     desc : 'Very good hoodie',
     img : 'assets/img/fashion2.jpg',
-    available : 'yes'
+    available : 'yes',
+    review_item : [people_1, people_2]
 }
 
 var fashion_3 = {
@@ -136,24 +156,18 @@ var fashion_3 = {
     price : 'Rp800.000,00',
     desc : 'Well designed jacket for everyday use',
     img : 'assets/img/fashion3.jpg',
-    available : 'no'
-}
-
-var people_1 = {
-        title : 'John',
-        desc : 'Glad I bought this !',
-        img : 'assets/img/review1.jpg',
-}
-
-var people_2 = {
-        title : 'Sasha',
-        desc : 'Very good and friendly seller !',
-        img : 'assets/img/review2.jpg',
+    available : 'no',
+    review_item : [people_1, people_2]
 }
 
 var resi = {
 	img : 'assets/img/resi.jpg',
 	desc : 'Click button below to download yout receipt'
+}
+
+var add_review = {
+    img : 'assets/img/addreview.png',
+    desc : 'Click the icon below to <b>give feedback</b> :)'
 }
 
 var sport = [sport_1,sport_2,sport_3];
@@ -168,9 +182,9 @@ var search_item = [];
 
 var sort_item = [];
 
-var review_item = [people_1, people_2];
-
 var bracket = [];
+
+var buyed_item = [];
 
 var payment_id = []
 
@@ -182,7 +196,7 @@ var arrived_item = [];
 
 var status_list = [];
 
-var view = []
+var view = [];
 
 var getMessageText, message_side, sendMessage, evaluateMessage;
 
@@ -194,6 +208,32 @@ function cleanArray(actual) {
     }
   }
   return newArray;
+}
+
+function addReview() {
+    var x = document.getElementById("modal_input_text").value;
+    var people = {
+        title : 'Adit',
+        desc : x,
+        img : 'assets/img/Adit.png'        
+    };
+
+    for (var i = 0; i < buyed_item.length; i++) {
+        for (var j = 0; j < all.length; j++) {
+            if (buyed_item[i].id == all[j].id) {
+                (all[j].review_item).push(people);
+            }
+        }       
+    }
+    /*
+    for (y in buyed_item) {
+        alert(buyed_item.length);
+        alert(y.id);
+        alert(y.review);
+        (y.review).push(people);
+    }
+    */
+    buyed_item = cleanArray(buyed_item);
 }
 
 var buy = function(thing, avail){
@@ -249,7 +289,25 @@ var delete_bracket = function(id){
 };
 
 var review_bracket = function(id){
-    sendMessage('review', 'right');
+    sendMessage('review ' + id, 'right');
+    var x;
+    for(j = 0; j < all.length; j++){
+        if (all[j].id == id) {
+            x = all[j].review_item;
+            break;
+        }                      
+    }
+                      
+    if (bracket.length > 0){
+        var message = new MessageShowReview({
+            text: 'Here you go',
+            message_side: 'left',
+            showreview: x
+        });
+        message.draw();
+    } else {
+        sendMessage('There is nothing inside your cart', 'left');
+    }    
 };
 
 (function () {
@@ -332,7 +390,7 @@ var review_bracket = function(id){
         if (arg.desc != null){    
             var div_desc = document.createElement('div');
             div_desc.innerHTML = arg.desc;
-            div_desc.setAttribute('style', 'display:block; padding: 0px 5px; font-size : 12pt; margin-left : 5px;')
+            div_desc.setAttribute('style', 'display:inline-block; padding: 0px 3px; font-size : 12pt;');
             div.appendChild(div_desc);
         }
 
@@ -341,7 +399,58 @@ var review_bracket = function(id){
         div.appendChild(div_download);
 
        return div;
-    }
+    };
+    var createReviewElement = function(arg){
+        var div = document.createElement('div');
+            
+        var div_desc = document.createElement('div');
+        div_desc.innerHTML = arg.desc;
+        div_desc.setAttribute('style', 'text-align: center; font-size: 12pt; margin-bottom: 1%;');
+        div.appendChild(div_desc);
+
+        var div_image = document.createElement('div');
+        var img = document.createElement('input');
+        img.setAttribute('style', 'display: block; width: 16%; margin: 0 auto; cursor: pointer;');
+        img.setAttribute('type', 'image'); 
+        img.setAttribute('src', arg.img); 
+        img.setAttribute('class', 'image_review_carousel');
+        img.setAttribute('data-toggle', 'modal');
+        img.setAttribute('data-target', '#myModal'); 
+        div_image.appendChild(img);
+        //div_image.setAttribute('onclick', '');
+        div.appendChild(div_image);
+
+       return div;
+    };
+    var createShowReviewElement = function(arg){
+        var div = document.createElement('div');
+        var br = document.createElement('br');
+        div.setAttribute('style', 'display: block; margin-bottom: 9%;');
+
+        var div_image = document.createElement('div');
+        var img = document.createElement('img');
+        div_image.setAttribute('style', 'float : left;');
+        img.setAttribute('src', arg.img); 
+        img.setAttribute('class', 'image_carousel');
+        div_image.appendChild(img);
+        div.appendChild(div_image);
+
+        var div_title = document.createElement('div');
+        var p_div_title = document.createElement('p');
+        div_title.innerHTML = arg.title;
+        div_title.setAttribute('style', 'display:inline-block; padding: 0px 15px; font-size : 18pt;')
+        //div_title.setAttribute('class', 'image_container');
+        div.appendChild(div_title);
+        div.appendChild(br);
+
+        var div_desc = document.createElement('div');
+        var p_div_desc = document.createElement('p');
+        div_desc.innerHTML = arg.desc;
+        div_desc.setAttribute('style', 'display:inline-block; padding: 0px 15px; font-size : 12pt;');
+        div.appendChild(div_desc);
+
+       return div;
+    };    
     var Message;
     Message = function (arg) {
         this.text = arg.text, this.message_side = arg.message_side;
@@ -393,7 +502,42 @@ var review_bracket = function(id){
             };
         }(this);
         return this;
-    }
+    };
+    var MessageReview;
+    MessageReview = function(arg){
+        this.text = arg.text, this.message_side = arg.message_side, this.review = arg.review;
+        this.draw = function (_this) {
+            return function () {
+                var $message;
+                $message = $($('.message_review').clone().html());
+                $message.addClass(_this.message_side).find('.text').html(_this.text);
+                $message.find('.carousel').append(createReviewElement(this.review));
+                $('.messages').append($message);
+                return setTimeout(function () {
+                    return $message.addClass('appeared');
+                }, 0);
+            };
+        }(this);
+        return this;
+    };
+    MessageShowReview = function(arg){
+        this.text = arg.text, this.message_side = arg.message_side, this.showreview = arg.showreview;
+        this.draw = function (_this) {
+            return function () {
+                var $message;
+                $message = $($('.message_show_review').clone().html());
+                $message.addClass(_this.message_side).find('.text').html(_this.text);
+                for(x in this.showreview){ 
+                    $message.find('.carousel').append(createShowReviewElement(this.showreview[x]));
+                }                
+                $('.messages').append($message);
+                return setTimeout(function () {
+                    return $message.addClass('appeared');
+                }, 0);
+            };
+        }(this);
+        return this;
+    };
     $(function () {
         getMessageText = function () {
             var $message_input;
@@ -473,6 +617,7 @@ var review_bracket = function(id){
                             selected_item['deletable'] = true;
                             selected_item['review'] = true;
                             bracket.push(selected_item);
+                            buyed_item.push(selected_item);
                             found = true;
                             break;
                         }
@@ -574,17 +719,8 @@ var review_bracket = function(id){
                 } else {
                     sendMessage('There is nothing inside your cart', 'left');
                 }
-            } else if (text.toLowerCase().indexOf('review') >= 0){
-                if (bracket.length > 0){
-                    var message = new MessageWithCarousel({
-                        text: 'Here you go',
-                        message_side: 'left',
-                        carousel: review_item
-                    });
-                    message.draw();
-                } else {
-                    sendMessage('There is nothing inside your cart', 'left');
-                }
+            } else if (text.toLowerCase().indexOf('review') >= 0) {
+
             } else if (text.toLowerCase().indexOf('pay') >= 0) {
                 if(bracket.length > 0){
                     var paymentList = new MessageWithCarousel({
@@ -676,7 +812,20 @@ var review_bracket = function(id){
                 if(found && (!foundPaid)) {
                     sendMessage("You haven't pay :(", 'left');
                 } else if (found && foundPaid) {
-                	sendMessage("Thank you for buying with us! Hope you enjoy your best experience with me :)", 'left');
+                    var msg = new MessageReview({
+                        text : "Your order has been delivered, stay calm and wait for it :)",
+                        message_side : 'left',
+                        review : add_review
+                    });
+                    msg.draw();                    
+                    /*
+                    var message_review = new MessageReview({
+                    text: "Thank you for buying with us! Hope you enjoy your best experience with me :)",
+                    message_side: 'left',
+                    app_review: add_review
+                    });
+                    message_review.draw();
+                    */
                 } else {
                     sendMessage("Sorry payment ID is not defined!", 'left');
                 }

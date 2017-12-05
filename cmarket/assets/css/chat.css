@@ -220,3 +220,7 @@ body {
 .image_container:hover{
   background-color: #33ccff;
 }
+
+#modal_input_text {
+  padding: 0 40rem 5rem 0;
+}
