@@ -224,17 +224,10 @@ function addReview() {
                 (all[j].review_item).push(people);
             }
         }       
+        delete buyed_item[i];
     }
 
-    document.getElementById("modal_input_text").innerHTML = '';
-    /*
-    for (y in buyed_item) {
-        alert(buyed_item.length);
-        alert(y.id);
-        alert(y.review);
-        (y.review).push(people);
-    }
-    */
+    document.getElementById("modal_input_text").value = '';
     buyed_item = cleanArray(buyed_item);
 }
 
