@@ -225,6 +225,8 @@ function addReview() {
             }
         }       
     }
+
+    document.getElementById("modal_input_text").innerHTML = '';
     /*
     for (y in buyed_item) {
         alert(buyed_item.length);
