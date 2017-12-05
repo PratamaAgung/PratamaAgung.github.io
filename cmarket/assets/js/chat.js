@@ -4,7 +4,7 @@ var command_key = [
         desc : 'help you to search what you want'
     },
     {
-        key : '<b>price</b>',
+        key : '<b>sort</b>',
         desc : 'sort item based on price'
     },
     {
@@ -672,7 +672,7 @@ var review_bracket = function(id){
                 		sendMessage("I can\'t get what you want", 'left');
                 	}
 
-            } else if (text.toLowerCase().indexOf('price') >= 0) {
+            } else if (text.toLowerCase().indexOf('sort') >= 0) {
                 var maks = 999999999999;
                 var prec_maks = -999999999999;
                 var indeks;
