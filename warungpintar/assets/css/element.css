@@ -1,0 +1,79 @@
+.medium-card {
+    margin: 10px auto;
+}
+
+.large-card {
+    width: 90%;
+}
+
+@media (min-width: 767px) {
+    .medium-card {
+        width: 50%;
+    }
+}
+
+@media(max-width: 767px){
+    .medium-card {
+        width: 90%;
+    }
+}
+
+.x-centering {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.floating-container {
+    position: fixed;
+    right : 30px;
+    bottom : 30px;
+    height : 55px;
+    width: 55px;
+    border-radius: 50%;
+    background-color: rgb(216, 6, 6);
+}
+
+.floating-inner {
+    width: 100%;
+    height: 100%;
+    font-size: 35px;
+    text-align: center;
+    margin: auto;
+    color: white;
+}
+
+.clickable {
+    cursor: pointer;
+    transition: background 0.5s;
+    -webkit-transition: background 0.5s;
+    -moz-transition: background 0.5s;
+}
+
+.clickable:hover {
+    color: gray;
+}
+
+.upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+  }
+  
+  .upload-btn {
+    border: 2px solid gray;
+    color: gray;
+    background-color: white;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .upload-btn-wrapper input[type=file] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+  }

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Survey</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.0.0-beta.4/dist/css/bootstrap-material-design.min.css" integrity="sha384-R80DC0KVBO4GSTw+wZ5x2zn2pu4POSErBkf8/fSFhPXHxvHJydT0CSgAP2Yo2r4I" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/element.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+</head>
+<body ng-app="survey-app" ng-controller="survey-ctrl" ng-init="initFirebase()">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="color: white;">
+        <a class="navbar-brand">Warung Pintar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="schedule.html">Jadwal</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="leads_list.html">Berita Peluang</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Survey</a>
+                </li>
+            </ul>
+
+            <div class="navbar-text mr-3">
+                <label class="mr-sm-2" for="sortSelect">Sort: </label>
+                <select class="custom-select mb-2 mr-sm-2 mb-sm-0" id="sortSelect">
+                    <option selected>Choose...</option>
+                    <option ng-click="orderByLokasiAsc()">Lokasi ASC</option>
+                    <option ng-click="orderByLokasiDesc()">Lokasi DESC</option>
+                    <option ng-click="orderByTanggalAsc()">Tanggal ASC</option>
+                    <option ng-click="orderByTanggalDesc()">Tanggal DESC</option>
+                </select>
+            </div>
+            <div class="navbar-text mr-3">
+                <div class="input-group">
+                    <span class="input-group-btn"><i class="material-icons">&#xE8B6;</i></span>
+                    <input class="form-control" style="color: white;" placeholder="Search" ng-change="search()" ng-model="searchInput">
+                </div>
+            </div>
+
+            <div class="navbar-text dropdown show">
+                <a class="btn btn-secondary dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="material-icons">&#xE853;</i>  <span style="padding: 5px">Account</span>
+                </a>
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" ng-click="logout()" href=""><i class="material-icons" style="padding-right: 5px;">&#xE8AC;</i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" ng-repeat="x in survey|orderBy:orderByField:reverseOrder">
+        <div class="card mt-3" ng-show="x.show">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-9 text-muted">
+                        {{x.data.timestamp*1000 | date:'d MMMM yyyy'}}
+                    </div>
+                    <div class="col-9 text-right">
+                        <span class="badge badge-pill badge-primary" ng-if="x.data.status_survey == 'survey'">Survey</span>
+                        <span class="badge badge-pill badge-success" ng-if="x.data.status_survey == 're-survey'">Re-Survey</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <h4 class="card-title">
+                    {{x.data.lokasi}}
+                </h4>
+                <div class="row">
+                    <p class="card-text col-9">
+                        ID: {{x.data.id}}
+                    </p>
+                    <div class="col-3 text-right">
+                        <button class="btn btn-primary active" ng-click="getDetail(x.data.id)">Detail</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="floating-container">
+        <div class="floating-inner" onclick="addSurvey()"><i class="material-icons clickable">&#xE145;</i></div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-material-design@4.0.0-beta.4/dist/js/bootstrap-material-design.js" integrity="sha384-3xciOSDAlaXneEmyOo0ME/2grfpqzhhTcM4cE32Ce9+8DW/04AGoTACzQpphYGYe" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+    <script type="text/javascript">
+        var config = {
+            apiKey: "AIzaSyBsAX03lMWPEA98QUvB-6I9HBoCFgl-WcQ",
+            authDomain: "wps-dev-189007.firebaseapp.com",
+            databaseURL: "https://wps-dev-189007-2dfd6.firebaseio.com/",
+            projectId: "wps-dev-189007",
+            storageBucket: "wps-dev-189007.appspot.com",
+            messagingSenderId: "847377211575"
+        };
+        firebase.initializeApp(config);
+    </script>
+    <script src="assets/js/cookie_adm.js"></script>
+    <script type="text/javascript" src="assets/js/survey_list.js"></script>
+</body>
+</html>

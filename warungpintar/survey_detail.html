@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Survey Detail</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.0.0-beta.4/dist/css/bootstrap-material-design.min.css" integrity="sha384-R80DC0KVBO4GSTw+wZ5x2zn2pu4POSErBkf8/fSFhPXHxvHJydT0CSgAP2Yo2r4I" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/element.css">
+    <link rel="stylesheet" href="assets/css/maps.css">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="color: white;">
+        <a class="navbar-brand">Warung Pintar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="schedule.html">Jadwal</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="leads_list.html">Berita Peluang</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="survey_list.html">Survey</a>
+                </li>
+            </ul>
+            <div class="navbar-text dropdown show">
+                <a class="btn btn-secondary dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="material-icons">&#xE853;</i>  <span style="padding: 5px">Account</span>
+                </a>
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="#"><i class="material-icons" style="padding-right: 5px;">&#xE8AC;</i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container text-center mb-3 mt-3">
+        <h3>Detail Survey</h3>
+    </div>
+
+    <div class="card medium-card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-10">
+                    <h4 class="card-title">ID: <span id="id"></span> | <span id="lokasi"></span></h4>
+                </div>
+                <div class="col-2">
+                    <span class="badge badge-pill badge-warning">Re-Survey</span>
+                </div>
+            </div>
+            
+            <h6 class="card-subitle text-muted">Lokasi</h6>
+            <div class="card-text">
+                <span id="nama-lokasi">Warung Haji Sulam</span> - <span id="daerah-operasional">BSD</span>
+            </div>
+            <div id="map" class="mb-1"></div>
+            <div class="row">
+                <div class="col-6 text-center text-muted" id="lat">
+                    Latitude: <span id="lat"></span>
+                </div>
+                <div class="col-6 text-center text-muted" id="long">
+                    Longitude: <span id="lng"></span>
+                </div>
+            </div>
+
+            <h6 class="card-subtitle text-muted mt-2">Contact Person</h6>
+            <p class="card-text" id="cp"></p>
+
+            <h6 class="card-subtitle text-muted mt-2">Tipe Pembangunan Warung</h6>
+            <p class="card-text" id="tipe"></p>
+
+            <h6 class="card-subtitle text-muted mt-2">Poin Positif Terkait Lahan</h6>
+            <p class="card-text" id="positif"></p>
+
+            <h6 class="card-subtitle text-muted mt-2">Poin Negatif Terkait Lahan</h6>
+            <p class="card-text" id="negatif"></p>
+
+            <h6 class="card-subtitle text-muted mt-2">Next To Do List</h6>
+            <p class="card-text" id="next"></p>
+
+            <h6 class="card-subtitle text-muted mt-2">Data lain</h6>
+            <p class="card-text" id="keterangan"></p>
+
+            <h6 class="card-subtitle text-muted mt-2">Harga Sewa</h6>
+            <p class="card-text" id="harga"></p>
+
+            <h6 class="card-subtitle text-muted mt-2">Foto Lokasi</h6>
+            <div class="card-columns mt-1">
+                <div class="card">
+                    <img class="card-img" src="assets/images/logo.jpg" >
+                </div>
+                <div class="card">
+                    <img class="card-img" src="assets/images/logo.jpg">
+                </div>
+            </div>
+
+            <h6 class="card-subtitle text-muted mt-2">Note Last Development</h6>
+            <input class="form-control" id="last-dev" name="last-dev" placeholder="Your Answer">
+
+            <div class="row mt-2">
+                <button class="btn btn-primary col-4 btn-lg active" id="re-survey">Re-Survey</button>
+                <button class="btn btn-primary col-4 btn-lg" id="analysis">Analysis</button>
+                <button class="btn btn-primary col-4 btn-lg" id="cancel">Cancel</button>
+            </div>
+        </div>
+    </div> 
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-material-design@4.0.0-beta.4/dist/js/bootstrap-material-design.js" integrity="sha384-3xciOSDAlaXneEmyOo0ME/2grfpqzhhTcM4cE32Ce9+8DW/04AGoTACzQpphYGYe" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="assets/js/survey_detail.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCv0-BowB4w_RNKVl8rLPn8geYOSzsHYGI &libraries=places"
+         async defer></script>
+
+    <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+    <script type="text/javascript">
+        var config = {
+            apiKey: "AIzaSyBsAX03lMWPEA98QUvB-6I9HBoCFgl-WcQ",
+            authDomain: "wps-dev-189007.firebaseapp.com",
+            databaseURL: "https://wps-dev-189007-2dfd6.firebaseio.com/",
+            projectId: "wps-dev-189007",
+            storageBucket: "wps-dev-189007.appspot.com",
+            messagingSenderId: "847377211575"
+        };
+        firebase.initializeApp(config);
+    </script>
+</body>
+</html>

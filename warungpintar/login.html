@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.0.0-beta.4/dist/css/bootstrap-material-design.min.css" integrity="sha384-R80DC0KVBO4GSTw+wZ5x2zn2pu4POSErBkf8/fSFhPXHxvHJydT0CSgAP2Yo2r4I" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/element.css">
+</head>
+<body>
+    <div class="card medium-card x-centering">
+        <img class="card-img-top" src="assets/images/logo.jpg" alt="Warung Pintar">
+        <div class="card-body">
+            <div class="card-header text-center">
+                <h4>Login</h4>
+            </div>
+            <div class="card-body">
+                <!-- <form> -->
+                    <div class="form-group" data-toggle='popover' data-placement='bottom' data-content='Please fill this field' id="email-popover">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="someone@mail.com" required>
+                    </div>
+                    <div class="form-group" data-toggle='popover' data-placement='bottom' data-content='Please fill this field' id="password-popover">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Your account password" required>
+                    </div>
+                    <button class="btn btn-primary active" onclick="login()">SIGN IN</button>
+                <!-- </form> -->
+            </div>
+        </div>
+    </div>
+
+    <div  id="popover"></div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-material-design@4.0.0-beta.4/dist/js/bootstrap-material-design.js" integrity="sha384-3xciOSDAlaXneEmyOo0ME/2grfpqzhhTcM4cE32Ce9+8DW/04AGoTACzQpphYGYe" crossorigin="anonymous"></script>
+    <script src="assets/js/cookie_adm.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+    <script type="text/javascript">
+        var config = {
+            apiKey: "AIzaSyBsAX03lMWPEA98QUvB-6I9HBoCFgl-WcQ",
+            authDomain: "wps-dev-189007.firebaseapp.com",
+            databaseURL: "https://wps-dev-189007.firebaseio.com/",
+            projectId: "wps-dev-189007",
+            storageBucket: "wps-dev-189007.appspot.com",
+            messagingSenderId: "847377211575"
+        };
+        firebase.initializeApp(config);
+    </script>
+
+    <script src="assets/js/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Form Survey</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.0.0-beta.4/dist/css/bootstrap-material-design.min.css" integrity="sha384-R80DC0KVBO4GSTw+wZ5x2zn2pu4POSErBkf8/fSFhPXHxvHJydT0CSgAP2Yo2r4I" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/element.css">
+    <link rel="stylesheet" href="assets/css/maps.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="color: white;">
+        <a class="navbar-brand">Warung Pintar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Jadwal</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Berita Peluang</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Survey</a>
+                </li>
+            </ul>
+            <div class="navbar-text dropdown show">
+                <a class="btn btn-secondary dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="material-icons">&#xE853;</i>  <span style="padding: 5px">Account</span>
+                </a>
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="#"><i class="material-icons" style="padding-right: 5px;">&#xE8AC;</i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container text-center mb-3 mt-3">
+        <h3>
+            Kegiatan Survey Lapangan
+        </h3>
+    </div>
+
+    <div class="container card large-card centering">
+        <div class="card-header text-muted">
+                Form ini bertujuan untuk memudahkan surveyor di dalam menginput data dan hasil kegiatan survey yang telah dilakukan. 
+                Sehingga setiap proses kegiatan dapat tercatat dengan baik dan keterlacakannya dapat dengan mudah diketahui.
+        </div>
+        <div class="card-body">
+            <form>
+                <strong class="card-title">Warung ID</strong>
+                <div class="form-group">
+                    <label class="card-text" for="warung-id">Tolong diisi jika lokasi ini adalah Leads yang belum di-survey langsung</label>
+                    <input type="text" class="form-control" placeholder="Your Answer" id="warung-id" name="warung-id">
+                </div>
+
+                <div class="mt-5"><strong class="card-title">Nama Tempat</strong></div>
+                <div class="form-group">
+                    <label class="card-text" for="nama-tempat">Contoh: Warung Haji Sulam, Kios Kemayoran 1, dll</label>
+                    <input type="text" class="form-control" required placeholder="Your Answer" id="nama-tempat" name="nama-tempat">
+                </div>
+
+                <div class="mt-5"><strong class="card-title">Daerah Operasional</strong></div>
+                <div class="custom-controls-stacked">
+                    <label class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="Jakarta" name="daerah" value="Jakarta">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Jakarta</span>
+                    </label>
+                    <label class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="BSD" name="daerah" value="BSD">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">BSD (Bumi Serpong Damai)</span>
+                    </label>
+                    <label class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="Tangsel" name="daerah" value="Tangerang Selatan">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Tangerang Selatan</span>
+                    </label>
+                    <label class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="Bogor" name="daerah" value="Bogor">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Bogor</span>
+                    </label>
+                    <label class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="Depok" name="daerah" value="Depok">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Depok</span>
+                    </label>
+                    <label class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="other-daerah" name="daerah" value="">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description"><input type="text" class="form-control" onchange="changeDaerah(this.value)" placeholder="Other"></span>
+                    </label>
+                </div>
+
+                <div class="mt-5"><strong class="card-title">Lokasi</strong></div>
+                <input id="pac-input" class="controls form-control" type="text" placeholder="Search Box">
+                <div id="map"></div>
+                <div class="row ml-1">
+                    <div class=" form-group col-6">
+                        <label class="card-text" for="latitude">Latitude</label>
+                        <input type="text" class="form-control" required placeholder="Your Answer" id="latitude" name="latitude">
+                    </div>
+                    <div class="form-group col-6">
+                        <label class="card-text" for="longitude">Longitude</label>
+                        <input type="text" class="form-control" required placeholder="Your Answer" id="longitude" name="longitude">
+                    </div>
+                </div>
+
+                <div class="mt-5"><strong class="card-title">Source/CP</strong></div>
+                <div class="form-group">
+                    <label class="card-text" for="cp">Isi nama orang kemudian kontak nomor hpnya atau nomor WhatsAppnya kalau perlu</label>
+                    <input type="text" class="form-control" required placeholder="Your Answer" id="cp" name="cp">
+                </div>
+
+                <div class="mt-5"><strong class="card-title">Tipe Pembangunan Warung Pintar</strong></div>
+                <a class="card-text">
+                    Pilih tipe pembangunan warung pintar yang mungkin bisa dilakukan jika dilihat dari survey lapangan yang ada.
+                </a>
+                <div class="custom-controls-stacked">
+                    <label class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="Own" name="tipe-bangun" value="Own">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Own</span>
+                    </label>
+                    <label class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="Franchise" name="tipe-bangun" value="Franchise">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Franchise</span>
+                    </label>
+                    <label class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="other-tipe" name="tipe-bangun" value="">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description"><input type="text" class="form-control" onchange="changeTipe(this.value)" placeholder="Other"></span>
+                    </label>
+                </div>
+
+                <div class="mt-5"><strong class="card-title">Pengukuran Area Lahan</strong></div>
+                <div class="form-group">
+                    <label class="card-text" for="cp">Ukur luas lahan yang dapat dibangun untuk warung pintar. Pertimbangkan juga untuk tempat parkir.
+                    </label>
+                    <input type="text" class="form-control" placeholder="Your Answer" id="area" name="area">
+                </div>
+
+                <div class="mt-5"><strong class="card-title">Catatan Selama Survey</strong></div>
+                <a class="card-text">
+                    Tulis poin-poin penting selama kegiatan survey yang telah dilakukan. Hal-hal penting terkait izin penggunaan lokasi (Legal), biaya sewa, prospek terkait traffic jalanan, 
+                    komunikasi dengan penanggung jawab daerah tersebut baik dari pemerintah, kepala masyarakat, preman, maupun pemilik lahan.
+                </a>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Your Answer" id="catatan" name="catatan">
+                </div>
+
+                <div class="mt-5"><strong class="card-title">Poin-Poin Positif Terkait Lahan</strong></div>
+                <div class="form-group">
+                    <input type="text" class="form-control" required placeholder="Your Answer" id="positif" name="positif">
+                </div>
+
+                <div class="mt-5"><strong class="card-title">Poin-Poin Negatif Terkait Lahan</strong></div>
+                <div class="form-group">
+                    <input type="text" class="form-control" required placeholder="Your Answer" id="negatif" name="negatif">
+                </div>
+
+                <div class="mt-5"><strong class="card-title">Minimal Sewa Berapa Lama?</strong></div>
+                <div class="custom-controls-stacked">
+                    <label class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="bulanan" name="lamasewa" value="bulanan">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Jakarta</span>
+                    </label>
+                    <label class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="3bulan" name="lamasewa" value="3 Bulan">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">3 Bulan</span>
+                    </label>
+                    <label class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="6bulan" name="lamasewa" value="6 Bulan">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">6 Bulan</span>
+                    </label>
+                    <label class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="1tahun" name="lamasewa" value="1 Tahun">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">1 Tahun</span>
+                    </label>
+                    <label class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="2tahun" name="lamasewa" value="2 Tahun">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">2 Tahun</span>
+                    </label>
+                    <label class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="other-lama" name="lamasewa" value="">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description"><input type="text" class="form-control" onchange="changeLama(this.value)" placeholder="Other"></span>
+                    </label>
+                </div>
+
+                <div class="mt-5"><strong class="card-title">Harga Sewa</strong></div>
+                <div class="form-group">
+                    <label class="card-text" for="harga">Mohon perjelas harga sewa perberapa lama (contoh: 20jt/tahun, 50jt/2 tahun, 200rb/bulan)
+                    </label>
+                    <input type="text" class="form-control" placeholder="Your Answer" id="harga" name="harga">
+                </div>
+
+                <div class="mt-5"><strong class="card-title">Data lain (Biaya listrik, air, gas, iuran ketertiban, omzet sehari/bulan, dll)</strong></div>
+                <div class="form-group">
+                    <label class="card-text" for="datalain">Jika kios/sudah ada warungnya, atau bisa juga bertanya di warung sekitar, untuk analisis profit dan juga assesment credit
+                    </label>
+                    <input type="text" class="form-control" placeholder="Your Answer" id="datalain" name="datalain">
+                </div>
+
+                <div class="mt-5"><strong class="card-title">Next-nya Apa?</strong></div>
+                <a class="card-text">
+                    Ini maksudnya dipilih saja diantara 3 status ini, kegaitan survei yang dilakukan itu membuahkan hasil data survi (maka pilih survei), atau dari kegiatan survei yang dilakukan tidak memungkinkan dibangunnya warung pintar (maka pilih cancel)
+                </a>
+                <div class="custom-controls-stacked">
+                    <label class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="survey" name="next" value="Survey">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Survey</span>
+                    </label>
+                    <label class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="analysis" name="next" value="Analysis">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Analysis</span>
+                    </label>
+                    <label class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="cancel" name="next" value="Cancel">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Cancel</span>
+                    </label>
+                </div>
+
+                <div class="mt-5"><strong class="card-title">Next To Do List (Keterangan Next)</strong></div>
+                <a class="card-text">
+                    Hal selanjutnya yang akan dilakukan, serta konfirmasi apa yang perlu diluruskan kembali kedepannya. Keterangannya ngapain setelah dilakukan survei. Apa yang berguna buat si Analyst nanti.
+                </a>
+                <div class="form-group">
+                    <input type="text" class="form-control" required placeholder="Your Answer" id="ketnext" name="ketnext">
+                </div>
+
+                <div class="mt-5"><strong class="card-title">Priority Analysis</strong></div>
+                <div class="custom-controls-stacked">
+                    <label class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="low" name="priority" value="Low">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Low</span>
+                    </label>
+                    <label class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="medium" name="priority" value="Medium">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Medium</span>
+                    </label>
+                    <label class="custom-control custom-radio">
+                        <input type="radio" class="custom-control-input" id="high" name="priority" value="High">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">High</span>
+                    </label>
+                </div>
+
+                <div class="mt-5"><strong class="card-title">Foto-Foto Lokasi</strong></div>
+                <a class="card-text">Masukkan foto yang menggambarkan lokasi jika diperlukan</a>
+                <div id="uploaded-file" class="card-columns ml-1 mt-1">
+
+                </div>
+                <div class="upload-btn-wrapper card-text">
+                    <button class="upload-btn">Upload a file</button>
+                    <input type="file" class="form-control" placeholder="Your Answer" id="foto" name="foto" onchange="uploadFile()">
+                </div>
+
+                <div class="mt-5"><strong class="card-title">Nama Penginput Data</strong></div>
+                <div class="form-group">
+                    <label class="card-text" for="pic">Masukin nama kamu ya! Agar bisa ditanyakan lebih lanjut</label>
+                    <input type="text" class="form-control" required placeholder="Your Answer" id="pic" name="pic">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js" integrity="sha384-fA23ZRQ3G/J53mElWqVJEGJzU0sTs+SvzG8fXVWP+kJQ1lwFAOkcUOysnlKJC33U" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/bootstrap-material-design@4.0.0-beta.4/dist/js/bootstrap-material-design.js" integrity="sha384-3xciOSDAlaXneEmyOo0ME/2grfpqzhhTcM4cE32Ce9+8DW/04AGoTACzQpphYGYe" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="assets/js/survey_form.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDh9WxS0WcX6xbFf8InU9uM0BCmJF3HvBE&libraries=places"
+         async defer></script>
+    <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+    <script type="text/javascript">
+        var config = {
+            apiKey: "AIzaSyBsAX03lMWPEA98QUvB-6I9HBoCFgl-WcQ",
+            authDomain: "wps-dev-189007.firebaseapp.com",
+            databaseURL: "https://wps-dev-189007-2dfd6.firebaseio.com/",
+            projectId: "wps-dev-189007",
+            storageBucket: "wps-dev-189007.appspot.com",
+            messagingSenderId: "847377211575"
+        };
+        firebase.initializeApp(config);
+    </script>
+</body>
+</html>
