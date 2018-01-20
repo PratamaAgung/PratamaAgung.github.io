@@ -21,13 +21,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Jadwal</a>
+                    <a class="nav-link" href="schedule.html">Jadwal</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Berita Peluang</a>
+                    <a class="nav-link" href="leads_list.html">Berita Peluang</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Survey</a>
+                    <a class="nav-link" href="survey_list.html">Survey</a>
                 </li>
             </ul>
             <div class="navbar-text dropdown show">
@@ -55,19 +55,23 @@
         </div>
         <div class="card-body">
             <form>
-                <strong class="card-title">Warung ID</strong>
+                <div><strong class="card-title">Warung ID</strong></div>
+                <a class="card-text">
+                    Tolong diisi jika lokasi ini adalah Leads yang belum di-survey langsung
+                </a>
                 <div class="form-group">
-                    <label class="card-text" for="warung-id">Tolong diisi jika lokasi ini adalah Leads yang belum di-survey langsung</label>
                     <input type="text" class="form-control" placeholder="Your Answer" id="warung-id" name="warung-id">
                 </div>
 
-                <div class="mt-5"><strong class="card-title">Nama Tempat</strong></div>
+                <div class="mt-5"><strong class="card-title">Alamat</strong></div>
+                <a class="card-text">
+                    Contoh: Warung Haji Sulam, Kios Kemayoran 1, dll
+                </a>
                 <div class="form-group">
-                    <label class="card-text" for="nama-tempat">Contoh: Warung Haji Sulam, Kios Kemayoran 1, dll</label>
                     <input type="text" class="form-control" required placeholder="Your Answer" id="nama-tempat" name="nama-tempat">
                 </div>
 
-                <div class="mt-5"><strong class="card-title">Daerah Operasional</strong></div>
+                <!-- <div class="mt-5"><strong class="card-title">Daerah Operasional</strong></div>
                 <div class="custom-controls-stacked">
                     <label class="custom-control custom-radio">
                         <input type="radio" class="custom-control-input" id="Jakarta" name="daerah" value="Jakarta">
@@ -99,7 +103,7 @@
                         <span class="custom-control-indicator"></span>
                         <span class="custom-control-description"><input type="text" class="form-control" onchange="changeDaerah(this.value)" placeholder="Other"></span>
                     </label>
-                </div>
+                </div> -->
 
                 <div class="mt-5"><strong class="card-title">Lokasi</strong></div>
                 <input id="pac-input" class="controls form-control" type="text" placeholder="Search Box">
@@ -116,8 +120,10 @@
                 </div>
 
                 <div class="mt-5"><strong class="card-title">Source/CP</strong></div>
+                <a class="card-text">
+                    Isi nama orang kemudian kontak nomor hpnya atau nomor WhatsAppnya kalau perlu
+                </a>
                 <div class="form-group">
-                    <label class="card-text" for="cp">Isi nama orang kemudian kontak nomor hpnya atau nomor WhatsAppnya kalau perlu</label>
                     <input type="text" class="form-control" required placeholder="Your Answer" id="cp" name="cp">
                 </div>
 
@@ -144,9 +150,10 @@
                 </div>
 
                 <div class="mt-5"><strong class="card-title">Pengukuran Area Lahan</strong></div>
+                <a class="card-text">
+                    Ukur luas lahan yang dapat dibangun untuk warung pintar. Pertimbangkan juga untuk tempat parkir.
+                </a>
                 <div class="form-group">
-                    <label class="card-text" for="cp">Ukur luas lahan yang dapat dibangun untuk warung pintar. Pertimbangkan juga untuk tempat parkir.
-                    </label>
                     <input type="text" class="form-control" placeholder="Your Answer" id="area" name="area">
                 </div>
 
@@ -169,7 +176,7 @@
                     <input type="text" class="form-control" required placeholder="Your Answer" id="negatif" name="negatif">
                 </div>
 
-                <div class="mt-5"><strong class="card-title">Minimal Sewa Berapa Lama?</strong></div>
+                <!-- <div class="mt-5"><strong class="card-title">Minimal Sewa Berapa Lama?</strong></div>
                 <div class="custom-controls-stacked">
                     <label class="custom-control custom-radio">
                         <input type="radio" class="custom-control-input" id="bulanan" name="lamasewa" value="bulanan">
@@ -201,7 +208,7 @@
                         <span class="custom-control-indicator"></span>
                         <span class="custom-control-description"><input type="text" class="form-control" onchange="changeLama(this.value)" placeholder="Other"></span>
                     </label>
-                </div>
+                </div> -->
 
                 <div class="mt-5"><strong class="card-title">Harga Sewa</strong></div>
                 <div class="form-group">
@@ -239,15 +246,15 @@
                     </label>
                 </div>
 
-                <div class="mt-5"><strong class="card-title">Next To Do List (Keterangan Next)</strong></div>
+                <!-- <div class="mt-5"><strong class="card-title">Next To Do List (Keterangan Next)</strong></div>
                 <a class="card-text">
                     Hal selanjutnya yang akan dilakukan, serta konfirmasi apa yang perlu diluruskan kembali kedepannya. Keterangannya ngapain setelah dilakukan survei. Apa yang berguna buat si Analyst nanti.
                 </a>
                 <div class="form-group">
                     <input type="text" class="form-control" required placeholder="Your Answer" id="ketnext" name="ketnext">
-                </div>
+                </div> -->
 
-                <div class="mt-5"><strong class="card-title">Priority Analysis</strong></div>
+                <!-- <div class="mt-5"><strong class="card-title">Priority Analysis</strong></div>
                 <div class="custom-controls-stacked">
                     <label class="custom-control custom-radio">
                         <input type="radio" class="custom-control-input" id="low" name="priority" value="Low">
@@ -264,7 +271,7 @@
                         <span class="custom-control-indicator"></span>
                         <span class="custom-control-description">High</span>
                     </label>
-                </div>
+                </div> -->
 
                 <div class="mt-5"><strong class="card-title">Foto-Foto Lokasi</strong></div>
                 <a class="card-text">Masukkan foto yang menggambarkan lokasi jika diperlukan</a>
@@ -276,13 +283,15 @@
                     <input type="file" class="form-control" placeholder="Your Answer" id="foto" name="foto" onchange="uploadFile()">
                 </div>
 
-                <div class="mt-5"><strong class="card-title">Nama Penginput Data</strong></div>
+                <!-- <div class="mt-5"><strong class="card-title">Nama Penginput Data</strong></div>
                 <div class="form-group">
                     <label class="card-text" for="pic">Masukin nama kamu ya! Agar bisa ditanyakan lebih lanjut</label>
                     <input type="text" class="form-control" required placeholder="Your Answer" id="pic" name="pic">
-                </div>
+                </div> -->
 
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <div class="text-right">
+                    <button type="submit" class="btn btn-primary btn-lg active">Submit</button>
+                </div>
             </form>
         </div>
     </div>

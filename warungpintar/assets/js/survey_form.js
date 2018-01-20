@@ -1,8 +1,13 @@
 $(document).ready(function() { 
-    $('body').bootstrapMaterialDesign(); 
+    $('body').bootstrapMaterialDesign();
 
     authUser();
-    initMap();
+    var data = getDataFromUrl();
+    initMap(data.lat, data.lng);
+    $('#warung-id').val(data.id);
+    $('#nama-tempat').val(data.lokasi);
+    $('#latitude').val(data.lat);
+    $('#longitude').val(data.lng);
 });
 
 function authUser(){
@@ -13,23 +18,37 @@ function authUser(){
     });
 }
 
+function getDataFromUrl(){
+    var url = new URL(window.location.href);
+    var id = url.searchParams.get('id');
+    var lokasi = url.searchParams.get('lokasi');
+    var lat = url.searchParams.get('lat');
+    var lng = url.searchParams.get('lng');
+    return {
+        id : id,
+        lokasi : lokasi,
+        lat : lat,
+        lng : lng   
+    };
+}
+
 var marker = false;
-function initMap() {
-    var defaultLat = null;
-    var defaultLng = null;
-
-    if (navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(function(position){
-            defaultLat = position.coords.latitude;
-            defaultLng = position.coords.longitude;
-            map.setCenter(new google.maps.LatLng(defaultLat, defaultLng));
-        })
-    }
-
+function initMap(defaultLat, defaultLng) {
     if (defaultLat == null || defaultLng == null){
-        defaultLat = -6.17511;
-        defaultLng = 106.8650395;
-    }
+        if (navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(function(position){
+                defaultLat = position.coords.latitude;
+                defaultLng = position.coords.longitude;
+                map.setCenter(new google.maps.LatLng(defaultLat, defaultLng));
+            })
+        }
+    
+        if (defaultLat == null || defaultLng == null){
+            defaultLat = -6.17511;
+            defaultLng = 106.8650395;
+        }
+    } 
+
     var map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: defaultLat, lng: defaultLng},
         zoom: 13,

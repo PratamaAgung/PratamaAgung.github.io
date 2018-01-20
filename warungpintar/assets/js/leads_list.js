@@ -87,5 +87,9 @@ app.controller('leads-list-ctrl', function($scope){
     $scope.getDetail = function(id){
         window.location.href = "leads_detail.html?id=" + id;
     }
+
+    $scope.addLeads = function(){
+        window.location.href = "leads_form.html";
+    }
 });
 

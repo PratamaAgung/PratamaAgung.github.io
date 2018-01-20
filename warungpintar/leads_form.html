@@ -55,9 +55,11 @@
         </div>
         <div class="card-body">
             <form>
-                <strong class="card-title">Peluang Lokasi/Kabar Berita Tentang</strong>
+                <div><strong class="card-title">Peluang Lokasi/Kabar Berita Tentang</strong></div>
+                <a class="card-text">
+                    Isi dengan judul berita/keberadaan lokasi/daerah
+                </a>
                 <div class="form-group">
-                    <label class="card-text" for="peluang-lokasi">Isi dengan judul berita/keberadaan lokasi/daerah</label>
                     <input type="text" class="form-control" required placeholder="Your Answer" id="peluang-lokasi" name="peluang-lokasi">
                 </div>
 
@@ -76,8 +78,10 @@
                 </div>
 
                 <div class="mt-5"><strong class="card-title">Source/CP</strong></div>
+                <a class="card-text">
+                    Isi nama orang kemudian kontak nomor hpnya atau nomor WhatsAppnya kalau perlu
+                </a>
                 <div class="form-group">
-                    <label class="card-text" for="cp">Isi nama orang kemudian kontak nomor hpnya atau nomor WhatsAppnya kalau perlu</label>
                     <input type="text" class="form-control" required placeholder="Your Answer" id="cp" name="cp">
                 </div>
 
@@ -161,14 +165,18 @@
                 </div>
 
                 <div class="mt-5"><strong class="card-title">Keterangan dan Pertimbangan Lain</strong></div>
+                <a class="card-text">
+                    Tuliskan hal-hal lain yang menjadi pertimbangannya
+                </a>
                 <div class="form-group">
-                    <label class="card-text" for="keterangan">Tuliskan hal-hal lain yang menjadi pertimbangannya</label>
                     <input type="text" class="form-control" placeholder="Your Answer" id="keterangan" name="keterangan">
                 </div>
 
                 <div class="mt-5"><strong class="card-title">Harga sewa</strong></div>
+                <a class="card-text">
+                    Jika ada harga sewa tuliskan. Bisa tiap tahun atau tiap bulan
+                </a>
                 <div class="form-group">
-                    <label class="card-text" for="harga">Jika ada harga sewa tuliskan. Bisa tiap tahun atau tiap bulan</label>
                     <input type="text" class="form-control" placeholder="Your Answer" id="harga" name="harga">
                 </div>
 
@@ -182,13 +190,15 @@
                     <input type="file" class="form-control" placeholder="Your Answer" id="foto" name="foto" onchange="uploadFile()">
                 </div>
 
-                <div class="mt-5"><strong class="card-title">Nama Penginput Data</strong></div>
+                <!-- <div class="mt-5"><strong class="card-title">Nama Penginput Data</strong></div>
                 <div class="form-group">
                     <label class="card-text" for="pic">Masukin nama kamu ya! Agar bisa ditanyakan lebih lanjut</label>
                     <input type="text" class="form-control" required placeholder="Your Answer" id="pic" name="pic">
-                </div>
+                </div> -->
 
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <div class="text-right">
+                    <button type="submit" class="btn btn-primary active btn-lg">Submit</button>
+                </div>
             </form>
         </div>
     </div>

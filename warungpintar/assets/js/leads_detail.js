@@ -7,6 +7,11 @@ $(document).ready(function() {
     var leads_data = setDataFromFirebase(id);
 });
 
+var id_leads;
+var lokasi_leads;
+var lat_leads;
+var lng_leads;
+
 function initMap(lat, lng) {
     var defaultLat = lat;
     var defaultLng = lng;
@@ -35,7 +40,6 @@ function authUser(){
 function setDataFromFirebase(id){
     var db = firebase.database();
     var ret;
-    var lat, lng;
     db.ref('/data').orderByChild("id").equalTo(id).once('value').then(function(snapshot){
         snapshot.forEach(function(child){
             ret = child.val();
@@ -43,9 +47,13 @@ function setDataFromFirebase(id){
 
         console.log(ret);
         initMap(ret.location.lat, ret.location.long);
+        id_leads = ret.id;
         $('#id').text(ret.id);
+        lokasi_leads = ret.Lokasi;
         $('#lokasi').text(ret.Lokasi);
+        lat_leads = ret.location.lat;
         $('#lat').text(ret.location.lat);
+        lng_leads = ret.location.long;
         $('#lng').text(ret.location.long);
         $('#cp').text(ret.CP);
         $('#tipe').text(ret.tipe_warung);
@@ -61,6 +69,10 @@ function getIdFromUrl(){
     var id = url.searchParams.get('id')
     if (id == null || id == "") window.location.href = 'leads_list.html';
     return id;
+}
+
+function survey(){
+    window.location.href = "survey_form.html?id=" + id_leads + "&lokasi=" + lokasi_leads + "&lat=" + lat_leads + "&lng=" + lng_leads;
 }
 
 function logout(){
