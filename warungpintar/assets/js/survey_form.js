@@ -124,7 +124,6 @@ function initMap(defaultLat, defaultLng) {
 
         $("#latitude").val(latitude);
         $("#longitude").val(longitude);
-        alert(latitude + " " + longitude);
     };
 }
 
