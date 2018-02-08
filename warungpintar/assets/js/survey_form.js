@@ -122,8 +122,8 @@ function initMap(defaultLat, defaultLng) {
         var latitude = marker.getPosition().lat();
         var longitude = marker.getPosition().lng();
 
-        $("#latitude").attr("value", latitude);
-        $("#longitude").attr("value", longitude);
+        $("#latitude").val(latitude);
+        $("#longitude").val(longitude);
     };
 }
 
